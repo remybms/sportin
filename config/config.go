@@ -2,12 +2,14 @@ package config
 
 import (
 	"sportin/database"
+	"sportin/database/dbmodel"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
 type Config struct {
+	CategoriesRepository dbmodel.CategoriesRepository
 }
 
 func New() (*Config, error) {
@@ -19,6 +21,7 @@ func New() (*Config, error) {
 	}
 
 	database.Migrate(databaseSession)
+	config.CategoriesRepository = dbmodel.NewCategoriesRepository(databaseSession)
 
 	return &config, nil
 }
