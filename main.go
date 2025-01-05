@@ -4,12 +4,15 @@ import (
 	"log"
 	"net/http"
 	"sportin/config"
+	musclegroup "sportin/pkg/muscleGroup"
 
 	"github.com/go-chi/chi/v5"
 )
 
 func Routes(configuration *config.Config) *chi.Mux {
 	router := chi.NewRouter()
+
+	router.Mount("/api/v1/muscle-group", musclegroup.Routes(configuration))
 
 	return router
 }

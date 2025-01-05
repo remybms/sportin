@@ -2,12 +2,14 @@ package config
 
 import (
 	"sportin/database"
+	"sportin/database/dbmodel"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
 type Config struct {
+	MuscleGroupEntryRepository dbmodel.MuscleGroupEntryRepository
 }
 
 func New() (*Config, error) {
@@ -19,6 +21,8 @@ func New() (*Config, error) {
 	}
 
 	database.Migrate(databaseSession)
+
+	config.MuscleGroupEntryRepository = dbmodel.NewMuscleGroupEntryRepository(databaseSession)
 
 	return &config, nil
 }
