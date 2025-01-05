@@ -12,6 +12,7 @@ type Config struct {
 	DB             *gorm.DB
 	UserRepository dbmodel.UserRepository
 	StatsRepository dbmodel.StatsRepository
+	CategoriesRepository dbmodel.CategoriesRepository
 }
 
 func New() (*Config, error) {
@@ -23,6 +24,7 @@ func New() (*Config, error) {
 	}
 
 	database.Migrate(databaseSession)
+	config.CategoriesRepository = dbmodel.NewCategoriesRepository(databaseSession)
 
 	config.UserRepository = dbmodel.NewUserRepository(databaseSession)
 	config.StatsRepository = dbmodel.NewStatsRepository(databaseSession)

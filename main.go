@@ -6,6 +6,7 @@ import (
 	"sportin/config"
 	"sportin/database/dbmodel"
 	"sportin/pkg/users"
+	"sportin/pkg/categories"
 
 	"github.com/go-chi/chi/v5"
 )
@@ -14,7 +15,7 @@ func Routes(configuration *config.Config, userRepository dbmodel.UserRepository)
 	router := chi.NewRouter()
 
 	router.Mount("/api/users", users.Routes(configuration, userRepository))
-
+	router.Mount("/api/categories", categories.Routes(configuration))
 	return router
 }
 
