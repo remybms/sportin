@@ -7,9 +7,13 @@ import (
 	"gorm.io/gorm"
 )
 
-var DB *gorm.DB
-
 func Migrate(db *gorm.DB) {
-	db.AutoMigrate(&dbmodel.MuscleGroupEntry{})
+	err := db.AutoMigrate(
+		&dbmodel.User{},
+    &dbmodel.MuscleGroupEntry{}
+	)
+	if err != nil {
+		log.Panicln("Database migration failed:", err)
+	}
 	log.Println("Database migrated successfully")
 }
