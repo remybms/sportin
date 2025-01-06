@@ -6,6 +6,7 @@ import (
 	"sportin/config"
 	"sportin/database/dbmodel"
 	"sportin/pkg/categories"
+	"sportin/pkg/muscle"
 	musclegroup "sportin/pkg/muscleGroup"
 	"sportin/pkg/users"
 
@@ -18,6 +19,7 @@ func Routes(configuration *config.Config, userRepository dbmodel.UserRepository)
 	router.Mount("/api/v1/muscle-group", musclegroup.Routes(configuration))
 	router.Mount("/api/v1/users", users.Routes(configuration, userRepository))
 	router.Mount("/api/v1/categories", categories.Routes(configuration))
+	router.Mount("/api/v1/muscle", muscle.Routes(configuration))
 	return router
 }
 

@@ -8,10 +8,11 @@ import (
 
 type MuscleGroupEntry struct {
 	gorm.Model
-	Name        string `gorm:"column:name"`
-	BodyPart    string `gorm:"column:body_part"`
-	Description string `gorm:"column:desciption"`
-	Level       string `gorm:"column:level"`
+	Name        string         `gorm:"column:name"`
+	BodyPart    string         `gorm:"column:body_part"`
+	Description string         `gorm:"column:desciption"`
+	Level       string         `gorm:"column:level"`
+	Muscles     []*MuscleEntry `gorm:"foreignKey:MuscleGroupID"`
 }
 
 type MuscleGroupEntryRepository interface {

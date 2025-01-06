@@ -1,6 +1,7 @@
 package musclegroup
 
 import (
+	"encoding/json"
 	"net/http"
 	"sportin/config"
 	"sportin/database/dbmodel"
@@ -68,10 +69,15 @@ func (config *MuscleGroup) Update(w http.ResponseWriter, r *http.Request) {
 	if err != nil || id < 1 {
 		http.Error(w, "Invalid id parameter", http.StatusBadRequest)
 	}
-	var data map[string]interface{}
 	muscleGroup, err := config.MuscleGroupEntryRepository.FindById(id)
 	if err != nil {
 		http.Error(w, "Muscle group not found", http.StatusNotFound)
+		return
+	}
+	var data map[string]interface{}
+	err = json.NewDecoder(r.Body).Decode(&data)
+	if err != nil {
+		http.Error(w, "Invalid request payload", http.StatusBadRequest)
 		return
 	}
 	helper.ApplyChanges(data, muscleGroup)
