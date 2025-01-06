@@ -21,7 +21,7 @@ type ProgramEntryRepository interface {
 	FindByID(id int) (*ProgramEntry, error)
 	Update(programEntry *ProgramEntry) (*ProgramEntry, error)
 	Delete(id int) (bool, error)
-	ToModel(entry *ProgramEntry) *ProgramEntry
+	ToModel(entry *ProgramEntry) *models.ProgramResponse
 }
 
 type programEntryRepository struct {
@@ -69,7 +69,7 @@ func (r *programEntryRepository) Delete(id int) (bool, error) {
 	return true, nil
 }
 
-func (r *programEntryRepository) ToModel(entry *ProgramEntry) *ProgramEntry {
+func (r *programEntryRepository) ToModel(entry *ProgramEntry) *models.ProgramResponse {
 	return &models.ProgramResponse{
 		ID:          int(entry.ID),
 		Name:        entry.Name,
