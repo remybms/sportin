@@ -22,6 +22,14 @@ func New(config *config.Config) *Muscle {
 	return &Muscle{config}
 }
 
+// @Summary Create a new muscle
+// @Description Create a new muscle
+// @Tags Muscle
+// @Accept json
+// @Produce json
+// @Param muscle body model.MuscleRequest true "Muscle object that needs to be created"
+// @Success 200 {object} model.MuscleResponse
+// @Router /muscle [post]
 func (config *Muscle) Create(w http.ResponseWriter, r *http.Request) {
 	request := &model.MuscleRequest{}
 	if err := render.Bind(r, request); err != nil {
@@ -41,6 +49,14 @@ func (config *Muscle) Create(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, r, config.MuscleEntryRepository.ToModel(muscle))
 }
 
+// @Summary Get muscle
+// @Description Get muscle
+// @Tags Muscle
+// @Accept json
+// @Produce json
+// @Param id path int true "Muscle ID"
+// @Success 200 {object} model.MuscleResponse
+// @Router /muscle/{id} [get]
 func (config *Muscle) Get(w http.ResponseWriter, r *http.Request) {
 	strId := chi.URLParam(r, "id")
 	if strId == "" {
@@ -59,6 +75,13 @@ func (config *Muscle) Get(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, r, config.MuscleEntryRepository.ToModel(muscle))
 }
 
+// @Summary Get all muscles
+// @Description Get all muscles
+// @Tags Muscle
+// @Accept json
+// @Produce json
+// @Success 200 {object} []model.MuscleResponse
+// @Router /muscle [get]
 func (config *Muscle) GetAll(w http.ResponseWriter, r *http.Request) {
 	muscles, err := config.MuscleEntryRepository.FindAll()
 	if err != nil {
@@ -68,6 +91,15 @@ func (config *Muscle) GetAll(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, r, config.MuscleEntryRepository.ToModelList(muscles))
 }
 
+// @Summary Update muscle
+// @Description Update muscle
+// @Tags Muscle
+// @Accept json
+// @Produce json
+// @Param id path int true "Muscle ID"
+// @Param muscle body model.MuscleRequest true "Muscle object that needs to be updated"
+// @Success 200 {object} model.MuscleResponse
+// @Router /muscle/{id} [put]
 func (config *Muscle) Update(w http.ResponseWriter, r *http.Request) {
 	strId := chi.URLParam(r, "id")
 	if strId == "" {
@@ -100,6 +132,14 @@ func (config *Muscle) Update(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, r, config.MuscleEntryRepository.ToModel(updatedMuscle))
 }
 
+// @Summary Delete muscle
+// @Description Delete muscle
+// @Tags Muscle
+// @Accept json
+// @Produce json
+// @Param id path int true "Muscle ID"
+// @Success 200 {object} string
+// @Router /muscle/{id} [delete]
 func (config *Muscle) Delete(w http.ResponseWriter, r *http.Request) {
 	strId := chi.URLParam(r, "id")
 	if strId == "" {

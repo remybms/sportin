@@ -21,6 +21,14 @@ func New(config *config.Config) *UserConfig {
 	return &UserConfig{config}
 }
 
+// @Summary Create a new user
+// @Description Create a new user
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param user body model.UserRequest true "User object that needs to be created"
+// @Success 200 {object} model.UserResponse
+// @Router /users [post]
 func (config *UserConfig) CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 	req := &model.UserRequest{}
 	if err := render.Bind(r, req); err != nil {
@@ -48,6 +56,14 @@ func (config *UserConfig) CreateUserHandler(w http.ResponseWriter, r *http.Reque
 
 	render.JSON(w, r, config.UserRepository.ToModel(newUser))
 }
+
+// @Summary Get all users
+// @Description Get all users
+// @Tags User
+// @Accept json
+// @Produce json
+// @Success 200 {object} []model.UserResponse
+// @Router /users [get]
 func (config *UserConfig) GetUsersHandler(w http.ResponseWriter, r *http.Request) {
 	users, err := config.UserRepository.FindAll()
 	if err != nil {
@@ -58,6 +74,14 @@ func (config *UserConfig) GetUsersHandler(w http.ResponseWriter, r *http.Request
 	render.JSON(w, r, config.UserRepository.ToModelList(users))
 }
 
+// @Summary Get user
+// @Description Get user
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param id path int true "User ID"
+// @Success 200 {object} model.UserResponse
+// @Router /users/{id} [get]
 func (config *UserConfig) GetUserByIDHandler(w http.ResponseWriter, r *http.Request) {
 	userIDStr := chi.URLParam(r, "id")
 	userID, err := strconv.Atoi(userIDStr)
@@ -75,6 +99,14 @@ func (config *UserConfig) GetUserByIDHandler(w http.ResponseWriter, r *http.Requ
 	render.JSON(w, r, config.UserRepository.ToModel(user))
 }
 
+// @Summary Update user
+// @Description Update user
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param id path int true "User ID"
+// @Param user body model.UserRequest true "User object that needs to be updated"
+// @Success 200 {object} model.UserResponse
 func (config *UserConfig) UpdateUserHandler(w http.ResponseWriter, r *http.Request) {
 	req := &model.UserRequest{}
 	if err := render.Bind(r, req); err != nil {
@@ -108,6 +140,14 @@ func (config *UserConfig) UpdateUserHandler(w http.ResponseWriter, r *http.Reque
 	render.JSON(w, r, config.UserRepository.ToModel(user))
 }
 
+// @Summary Delete user
+// @Description Delete user
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param id path int true "User ID"
+// @Success 200 {object} string
+// @Router /users/{id} [delete]
 func (config *UserConfig) DeleteUserHandler(w http.ResponseWriter, r *http.Request) {
 	userIDStr := chi.URLParam(r, "id")
 	userID, err := strconv.Atoi(userIDStr)

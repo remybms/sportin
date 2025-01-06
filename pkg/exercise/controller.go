@@ -21,6 +21,14 @@ func New(config *config.Config) *exerciseConfig {
 	return &exerciseConfig{config}
 }
 
+// @Summary Create a new exercise
+// @Description Delete a new exercise
+// @Tags Exercise
+// @Accept json
+// @Produce json
+// @Param exercise body model.ExerciseRequest true "Exercise object that needs to be created"
+// @Success 200 {object} model.ExerciseResponse
+// @Router /exercise [post]
 func (config *exerciseConfig) Create(w http.ResponseWriter, r *http.Request) {
 	req := &model.ExerciseRequest{}
 	if err := render.Bind(r, req); err != nil {
@@ -48,6 +56,14 @@ func (config *exerciseConfig) GetAll(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, r, responseEntries)
 }
 
+// @Summary Get exercise
+// @Description Get exercise
+// @Tags Exercise
+// @Accept json
+// @Produce json
+// @Param id path int true "Exercise ID"
+// @Success 200 {object} []model.ExerciseResponse
+// @Router /exercise [get]
 func (config *exerciseConfig) Get(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")
 	id, err := strconv.Atoi(idStr)
@@ -63,6 +79,15 @@ func (config *exerciseConfig) Get(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, r, config.ExerciseEntryRepository.ToModel(entry))
 }
 
+// @Summary Update a new exercise
+// @Description Update a new exercise
+// @Tags Exercise
+// @Accept json
+// @Produce json
+// @Param id path int true "Exercise ID"
+// @Param exercise body model.ExerciseRequest true "Exercise object that needs to be updated"
+// @Success 200 {object} model.ExerciseResponse
+// @Router /exercise/{id} [put]
 func (config *exerciseConfig) Update(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")
 	id, err := strconv.Atoi(idStr)
@@ -96,6 +121,14 @@ func (config *exerciseConfig) Update(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, r, config.ExerciseEntryRepository.ToModel(entry))
 }
 
+// @Summary Delete a new exercise
+// @Description Delete a new exercise
+// @Tags Exercise
+// @Accept json
+// @Produce json
+// @Param id path int true "Exercise ID"
+// @Success 200 {object} string
+// @Router /exercise/{id} [delete]
 func (config *exerciseConfig) Delete(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")
 	if idStr == "" {
