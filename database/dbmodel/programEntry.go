@@ -8,8 +8,8 @@ import (
 
 type ProgramEntry struct {
 	gorm.Model
-	Name        string        `gorm:"column:name`
-	Description string        `gorm:"column:description`
+	Name        string        `gorm:"column:name"`
+	Description string        `gorm:"column:description"`
 	UserID      int           `gorm:"column:user_id"`
 	User        UserEntry     `gorm:"foreignKey:UserID"`
 	CategoryID  int           `gorm:"column:category_id"`
