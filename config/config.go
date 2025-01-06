@@ -17,7 +17,8 @@ type Config struct {
 	ProgramEntryRepository         dbmodel.ProgramEntryRepository
 	MuscleEntryRepository          dbmodel.MuscleEntryRepository
 	IntensificationEntryRepository dbmodel.IntensificationEntryRepository
-	ExerciseEntryRepository    dbmodel.ExerciseEntryRepository
+	ExerciseEntryRepository        dbmodel.ExerciseEntryRepository
+}
 
 func New() (*Config, error) {
 	config := Config{}
