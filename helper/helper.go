@@ -1,8 +1,11 @@
 package helper
 
 import (
+	"log"
+	"os"
 	"strings"
 
+	"github.com/joho/godotenv"
 	"github.com/mitchellh/mapstructure"
 )
 
@@ -55,4 +58,14 @@ func Contains(s []string, str string) bool {
 	}
 
 	return false
+}
+
+func GoDotEnvVariable(key string) string {
+	err := godotenv.Load()
+
+	if err != nil {
+		log.Fatalf("Error loading .env file")
+	}
+
+	return os.Getenv(key)
 }

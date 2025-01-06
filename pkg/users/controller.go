@@ -212,7 +212,7 @@ func (config *UserConfig) LoginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	token, err := authentification.GenerateJWTToken("your_secret_key", userEntry)
+	token, err := authentification.GenerateJWTToken(helper.GoDotEnvVariable("SECRET_KEY"), userEntry)
 	if err != nil {
 		http.Error(w, "Failed to generate token", http.StatusInternalServerError)
 		return
