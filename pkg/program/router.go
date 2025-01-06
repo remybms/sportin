@@ -15,6 +15,7 @@ func Routes(configuration *config.Config) chi.Router {
 	router.Post("/", programConfig.CreateProgramHandler)
 	router.Put("/{id}", programConfig.UpdateProgramHandler)
 	router.Delete("/{id}", programConfig.DeleteProgramHandler)
+	router.Get("/{id}/exercises", programConfig.GetAllExercicesByProgram)
 
 	return router
 }
