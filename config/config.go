@@ -1,9 +1,13 @@
 package config
 
 import (
+	"fmt"
+	"log"
+	"os"
 	"sportin/database"
 	"sportin/database/dbmodel"
 
+	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -25,7 +29,13 @@ type Config struct {
 func New() (*Config, error) {
 	config := Config{}
 
-	databaseSession, err := gorm.Open(mysql.Open("sportin:sportin@tcp(localhost:3306)/sportin?charset=utf8mb4&parseTime=True&loc=Local"), &gorm.Config{})
+	user := goDotEnvVariable("DBUSER")
+	password := goDotEnvVariable("DBPASSWORD")
+	port := goDotEnvVariable("DBPORT")
+	host := goDotEnvVariable("DBHOST")
+	dbName := goDotEnvVariable("DBNAME")
+
+	databaseSession, err := gorm.Open(mysql.Open(user+":"+password+"@tcp("+host+":"+port+")/"+dbName+"?charset=utf8mb4&parseTime=True&loc=Local"), &gorm.Config{})
 	if err != nil {
 		return &config, err
 	}
@@ -44,4 +54,15 @@ func New() (*Config, error) {
 
 	config.ProgramExerciseEntryRepository = dbmodel.NewProgramExerciseEntryRepository(databaseSession)
 	return &config, nil
+}
+
+func goDotEnvVariable(key string) string {
+	err := godotenv.Load()
+
+	if err != nil {
+		fmt.Print(err)
+		log.Fatalf("Error loading .env file")
+	}
+
+	return os.Getenv(key)
 }
