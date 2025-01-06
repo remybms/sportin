@@ -1,9 +1,11 @@
 package musclegroup
 
 import (
+	"encoding/json"
 	"net/http"
 	"sportin/config"
 	"sportin/database/dbmodel"
+	"sportin/helper"
 	"sportin/pkg/model"
 	"strconv"
 
@@ -77,12 +79,19 @@ func (config *MuscleGroup) Update(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Muscle group not found", http.StatusNotFound)
 		return
 	}
-	muscleGroup.Name = request.Name
-	muscleGroup.BodyPart = request.BodyPart
-	muscleGroup.Description = request.Description
-	muscleGroup.Level = request.Level
-	config.MuscleGroupEntryRepository.Update(muscleGroup)
-	render.JSON(w, r, config.MuscleGroupEntryRepository.ToModel(muscleGroup))
+	var data map[string]interface{}
+	err = json.NewDecoder(r.Body).Decode(&data)
+	if err != nil {
+		http.Error(w, "Invalid request payload", http.StatusBadRequest)
+		return
+	}
+	helper.ApplyChanges(data, muscleGroup)
+	updatedMuscleGroup, err := config.MuscleGroupEntryRepository.Update(muscleGroup)
+	if err != nil {
+		render.JSON(w, r, map[string]string{"error": "Failed to update user"})
+		return
+	}
+	render.JSON(w, r, config.MuscleGroupEntryRepository.ToModel(updatedMuscleGroup))
 }
 
 func (config *MuscleGroup) Delete(w http.ResponseWriter, r *http.Request) {

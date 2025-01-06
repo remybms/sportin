@@ -15,6 +15,7 @@ type Config struct {
 	UserStatsRepository        dbmodel.UserStatsRepository
 	CategoryEntryRepository    dbmodel.CategoryEntryRepository
 	ProgramEntryRepository     dbmodel.ProgramEntryRepository
+	MuscleEntryRepository      dbmodel.MuscleEntryRepository
 }
 
 func New() (*Config, error) {

@@ -12,6 +12,7 @@ func Migrate(db *gorm.DB) {
 		&dbmodel.UserEntry{},
 		&dbmodel.UserStatsEntry{},
 		&dbmodel.MuscleGroupEntry{},
+		&dbmodel.MuscleEntry{},
 		&dbmodel.CategoryEntry{},
 		&dbmodel.ProgramEntry{},
 	)

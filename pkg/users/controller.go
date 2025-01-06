@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"sportin/config"
 	"sportin/database/dbmodel"
+	"sportin/helper"
 	"sportin/pkg/model"
 	"strconv"
 
@@ -88,22 +89,15 @@ func (config *UserConfig) UpdateUserHandler(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
+	var data map[string]interface{}
+
 	user, err := config.UserRepository.FindByID(userID)
 	if err != nil {
 		render.JSON(w, r, map[string]string{"error": "User not found"})
 		return
 	}
 
-	user.Username = req.Username
-	user.Email = req.Email
-	if req.Password != "" {
-		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
-		if err != nil {
-			render.JSON(w, r, map[string]string{"error": "Failed to process password"})
-			return
-		}
-		user.Password = string(hashedPassword)
-	}
+	helper.ApplyChanges(data, user)
 
 	_, err = config.UserRepository.Update(user)
 	if err != nil {
