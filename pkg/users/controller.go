@@ -55,6 +55,11 @@ func (config *UserConfig) GetUsersHandler(w http.ResponseWriter, r *http.Request
 		return
 	}
 
+	if len(users) == 0 {
+		render.JSON(w, r, map[string]string{"message": "no users found"})
+		return
+	}
+
 	render.JSON(w, r, config.UserRepository.ToModelList(users))
 }
 
