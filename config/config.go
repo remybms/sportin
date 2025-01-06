@@ -9,11 +9,12 @@ import (
 )
 
 type Config struct {
-	DB                     *gorm.DB
-	UserRepository         dbmodel.UserRepository
-	StatsRepository        dbmodel.StatsRepository
-	CategoriesRepository   dbmodel.CategoriesRepository
-	ProgramEntryRepository dbmodel.ProgramEntryRepository
+	DB                         *gorm.DB
+	MuscleGroupEntryRepository dbmodel.MuscleGroupEntryRepository
+	UserRepository             dbmodel.UserRepository
+	StatsRepository            dbmodel.StatsRepository
+	CategoriesRepository       dbmodel.CategoriesRepository
+	ProgramEntryRepository     dbmodel.ProgramEntryRepository
 }
 
 func New() (*Config, error) {
@@ -25,10 +26,10 @@ func New() (*Config, error) {
 	}
 
 	database.Migrate(databaseSession)
-
 	config.CategoriesRepository = dbmodel.NewCategoriesRepository(databaseSession)
 	config.UserRepository = dbmodel.NewUserRepository(databaseSession)
 	config.StatsRepository = dbmodel.NewStatsRepository(databaseSession)
+	config.MuscleGroupEntryRepository = dbmodel.NewMuscleGroupEntryRepository(databaseSession)
 	config.ProgramEntryRepository = dbmodel.NewProgramEntryRepository(databaseSession)
 
 	return &config, nil
