@@ -14,7 +14,8 @@ type ExerciseEntry struct {
 	MuscleGroup     MuscleGroupEntry
 	MuscleGroupID   int `gorm:"column:muscle_group_id"`
 	User            UserEntry
-	UserID          int `gorm:"column:user_id"`
+	UserID          int                     `gorm:"column:user_id"`
+	ProgramExercise []*ProgramExerciseEntry `gorm:"foreignKey:ExerciseID"`
 }
 
 type ExerciseEntryRepository interface {

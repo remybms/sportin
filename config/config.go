@@ -18,6 +18,7 @@ type Config struct {
 	MuscleEntryRepository          dbmodel.MuscleEntryRepository
 	IntensificationEntryRepository dbmodel.IntensificationEntryRepository
 	ExerciseEntryRepository        dbmodel.ExerciseEntryRepository
+	ProgramExerciseEntryRepository dbmodel.ProgramExerciseEntryRepository
 }
 
 func New() (*Config, error) {
@@ -38,6 +39,6 @@ func New() (*Config, error) {
 	config.MuscleEntryRepository = dbmodel.NewMuscleEntryRepository(databaseSession)
 	config.ExerciseEntryRepository = dbmodel.NewExerciseEntryRepository(databaseSession)
 	config.IntensificationEntryRepository = dbmodel.NewIntensificationEntryRepository(databaseSession)
-
+	config.ProgramExerciseEntryRepository = dbmodel.NewProgramExerciseEntryRepository(databaseSession)
 	return &config, nil
 }
