@@ -58,6 +58,11 @@ func (config *CategoriesConfigurator) GetAllCategoriesHandler(w http.ResponseWri
 		return
 	}
 
+	if len(entries) == 0 {
+		http.Error(w, "No categories found", http.StatusNotFound)
+		return
+	}
+
 	responseEntries := make([]*model.CategoryResponse, len(entries))
 
 	for i, entry := range entries {
@@ -151,6 +156,12 @@ func (config *CategoriesConfigurator) DeleteCategoryHandler(w http.ResponseWrite
 		return
 	}
 
+	_, err = config.CategoryEntryRepository.FindById(id)
+	if err != nil {
+		http.Error(w, "No category found", http.StatusNotFound)
+		return
+	}
+
 	valid, err := config.CategoryEntryRepository.Delete(id)
 	if err != nil {
 		http.Error(w, "Failed to delete category on this id", http.StatusInternalServerError)
@@ -161,5 +172,6 @@ func (config *CategoriesConfigurator) DeleteCategoryHandler(w http.ResponseWrite
 		http.Error(w, "Category does not exist", http.StatusNotFound)
 		return
 	}
+
 	render.JSON(w, r, map[string]string{"message": "Category deleted"})
 }

@@ -1,10 +1,12 @@
 package users
 
 import (
+	"encoding/json"
 	"net/http"
 	"sportin/config"
 	"sportin/database/dbmodel"
 	"sportin/helper"
+	"sportin/pkg/authentification"
 	"sportin/pkg/model"
 	"strconv"
 
@@ -72,7 +74,7 @@ func (config *UserConfig) GetUsersHandler(w http.ResponseWriter, r *http.Request
 	}
 
 	if len(users) == 0 {
-		render.JSON(w, r, map[string]string{"message": "User not found"})
+		http.Error(w, "No users found", http.StatusNotFound)
 		return
 	}
 
@@ -163,7 +165,7 @@ func (config *UserConfig) DeleteUserHandler(w http.ResponseWriter, r *http.Reque
 
 	_, err = config.UserRepository.FindByID(userID)
 	if err != nil {
-		render.JSON(w, r, map[string]string{"message": "User not found"})
+		http.Error(w, "No users found", http.StatusNotFound)
 		return
 	}
 
@@ -173,4 +175,49 @@ func (config *UserConfig) DeleteUserHandler(w http.ResponseWriter, r *http.Reque
 	}
 
 	render.JSON(w, r, map[string]string{"message": "User deleted successfully"})
+}
+
+// @Summary Login
+// @Description Login
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param email body string true "Email"
+// @Param password body string true "Password"
+// @Success 200 {object} string
+// @Failure 400 {object} string
+// @Failure 401 {object} string
+// @Failure 404 {object} string
+// @Failure 500 {object} string
+// @Router /login [post]
+func (config *UserConfig) LoginHandler(w http.ResponseWriter, r *http.Request) {
+	var payload struct {
+		Email    string `json:"email"`
+		Password string `json:"password"`
+	}
+
+	if err := json.NewDecoder(r.Body).Decode(&payload); err != nil {
+		http.Error(w, "invalid request", http.StatusBadRequest)
+		return
+	}
+
+	userEntry, err := config.UserRepository.FindByEmail(payload.Email)
+	if err != nil {
+		http.Error(w, "Unknow user", http.StatusNotFound)
+		return
+	}
+
+	if err := bcrypt.CompareHashAndPassword([]byte(userEntry.Password), []byte(payload.Password)); err != nil {
+		http.Error(w, "Invalid email or password", http.StatusUnauthorized)
+		return
+	}
+
+	token, err := authentification.GenerateJWTToken("your_secret_key", userEntry)
+	if err != nil {
+		http.Error(w, "Failed to generate token", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	render.JSON(w, r, (map[string]string{"token": token}))
 }
