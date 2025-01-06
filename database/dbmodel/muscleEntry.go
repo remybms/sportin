@@ -1,7 +1,7 @@
 package dbmodel
 
 import (
-	"sportin/pkg/models"
+	"sportin/pkg/model"
 
 	"gorm.io/gorm"
 )
@@ -20,8 +20,8 @@ type MuscleEntryRepository interface {
 	FindById(id int) (*MuscleEntry, error)
 	Update(muscleEntry *MuscleEntry) (*MuscleEntry, error)
 	Delete(id int) error
-	ToModel(muscleEntry *MuscleEntry) *models.MuscleResponse
-	ToModelList(muscleEntries []*MuscleEntry) []*models.MuscleResponse
+	ToModel(muscleEntry *MuscleEntry) *model.MuscleResponse
+	ToModelList(muscleEntries []*MuscleEntry) []*model.MuscleResponse
 }
 
 type muscleEntryRepository struct {
@@ -69,8 +69,8 @@ func (r *muscleEntryRepository) Delete(id int) error {
 	return nil
 }
 
-func (r *muscleEntryRepository) ToModel(muscleEntry *MuscleEntry) *models.MuscleResponse {
-	return &models.MuscleResponse{
+func (r *muscleEntryRepository) ToModel(muscleEntry *MuscleEntry) *model.MuscleResponse {
+	return &model.MuscleResponse{
 		ID:            int(muscleEntry.ID),
 		Name:          muscleEntry.Name,
 		Description:   muscleEntry.Description,
@@ -78,8 +78,8 @@ func (r *muscleEntryRepository) ToModel(muscleEntry *MuscleEntry) *models.Muscle
 	}
 }
 
-func (r *muscleEntryRepository) ToModelList(muscleEntries []*MuscleEntry) []*models.MuscleResponse {
-	var responses []*models.MuscleResponse
+func (r *muscleEntryRepository) ToModelList(muscleEntries []*MuscleEntry) []*model.MuscleResponse {
+	var responses []*model.MuscleResponse
 	for _, entry := range muscleEntries {
 		responses = append(responses, r.ToModel(entry))
 	}

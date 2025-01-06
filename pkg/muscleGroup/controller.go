@@ -6,7 +6,7 @@ import (
 	"sportin/config"
 	"sportin/database/dbmodel"
 	"sportin/helper"
-	"sportin/pkg/models"
+	"sportin/pkg/model"
 	"strconv"
 
 	"github.com/go-chi/chi/v5"
@@ -69,7 +69,7 @@ func (config *MuscleGroup) Update(w http.ResponseWriter, r *http.Request) {
 	if err != nil || id < 1 {
 		http.Error(w, "Invalid id parameter", http.StatusBadRequest)
 	}
-	request := &models.MuscleGroupRequest{}
+	request := &model.MuscleGroupRequest{}
 	if err := render.Bind(r, request); err != nil {
 		http.Error(w, "Invalid request payload", http.StatusBadRequest)
 		return

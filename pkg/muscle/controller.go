@@ -7,7 +7,7 @@ import (
 	"sportin/config"
 	"sportin/database/dbmodel"
 	"sportin/helper"
-	"sportin/pkg/models"
+	"sportin/pkg/model"
 	"strconv"
 
 	"github.com/go-chi/chi/v5"
@@ -23,7 +23,7 @@ func New(config *config.Config) *Muscle {
 }
 
 func (config *Muscle) Create(w http.ResponseWriter, r *http.Request) {
-	request := &models.MuscleRequest{}
+	request := &model.MuscleRequest{}
 	if err := render.Bind(r, request); err != nil {
 		http.Error(w, "Invalid request payload", http.StatusBadRequest)
 		return
