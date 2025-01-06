@@ -19,6 +19,7 @@ type ProgramExerciseEntryRepository interface {
 	Create(programExerciseEntry *ProgramExerciseEntry) (*ProgramExerciseEntry, error)
 	FindAll() ([]*ProgramExerciseEntry, error)
 	FindById(id int) (*ProgramExerciseEntry, error)
+	FindByProgramID(id int) ([]*ExerciseEntry, error)
 	Update(programExerciseEntry *ProgramExerciseEntry) (*ProgramExerciseEntry, error)
 	Delete(id int) error
 	ToModel(programExerciseEntry *ProgramExerciseEntry) *model.ProgramExerciseResponse
@@ -84,4 +85,20 @@ func (r *programExerciseEntryRepository) ToModelList(programExerciseEntrys []*Pr
 		responses = append(responses, r.ToModel(pe))
 	}
 	return responses
+}
+
+func (r *programExerciseEntryRepository) FindByProgramID(id int) ([]*ExerciseEntry, error) {
+	var programExerciseEntrys []*ProgramExerciseEntry
+	if err := r.db.Where("program_id = ?", id).Find(&programExerciseEntrys).Error; err != nil {
+		return nil, err
+	}
+	var exercises []*ExerciseEntry
+	for _, pe := range programExerciseEntrys {
+		var exercise *ExerciseEntry
+		if err := r.db.First(&exercise, pe.ExerciseID).Error; err != nil {
+			return nil, err
+		}
+		exercises = append(exercises, exercise)
+	}
+	return exercises, nil
 }

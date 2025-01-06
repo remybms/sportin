@@ -21,6 +21,14 @@ func New(configuration *config.Config) *UserStatsConfigurator {
 	return &UserStatsConfigurator{configuration}
 }
 
+// @Summary Create a new UserStats
+// @Description Create a new UserStats
+// @Tags UserStats
+// @Accept json
+// @Produce json
+// @Param userStats body model.UserStatsRequest true "UserStats object that needs to be created"
+// @Success 200 {object} model.UserStatsResponse
+// @Router /userStats [post]
 func (config *UserStatsConfigurator) CreateUserStatsHandler(w http.ResponseWriter, r *http.Request) {
 	req := &model.UserStatsRequest{}
 	if err := render.Bind(r, req); err != nil {
@@ -34,6 +42,13 @@ func (config *UserStatsConfigurator) CreateUserStatsHandler(w http.ResponseWrite
 	render.JSON(w, r, config.UserStatsRepository.ToModel(userStatsEntry))
 }
 
+// @Summary Get all UserStats
+// @Description Get all UserStats
+// @Tags UserStats
+// @Accept json
+// @Produce json
+// @Success 200 {object} []model.UserStatsResponse
+// @Router /userStats [get]
 func (config *UserStatsConfigurator) GetAllUsersStatsHandler(w http.ResponseWriter, r *http.Request) {
 	entries, err := config.UserStatsRepository.FindAll()
 	if err != nil {
@@ -50,6 +65,14 @@ func (config *UserStatsConfigurator) GetAllUsersStatsHandler(w http.ResponseWrit
 	render.JSON(w, r, responseEntries)
 }
 
+// @Summary Get UserStats
+// @Description Get UserStats
+// @Tags UserStats
+// @Accept json
+// @Produce json
+// @Param id path int true "UserStats ID"
+// @Success 200 {object} model.UserStatsResponse
+// @Router /userStats/{id} [get]
 func (config *UserStatsConfigurator) GetUserStatsHandler(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")
 	id, err := strconv.Atoi(idStr)
@@ -66,6 +89,15 @@ func (config *UserStatsConfigurator) GetUserStatsHandler(w http.ResponseWriter, 
 	render.JSON(w, r, config.UserStatsRepository.ToModel(entry))
 }
 
+// @Summary Update a UserStats
+// @Description Update a UserStats
+// @Tags UserStats
+// @Accept json
+// @Produce json
+// @Param id path int true "UserStats ID"
+// @Param userStats body model.UserStatsRequest true "UserStats object that needs to be updated"
+// @Success 200 {object} model.UserStatsResponse
+// @Router /userStats/{id} [put]
 func (config *UserStatsConfigurator) UpdateUserStatsHandler(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")
 	id, err := strconv.Atoi(idStr)
@@ -99,6 +131,14 @@ func (config *UserStatsConfigurator) UpdateUserStatsHandler(w http.ResponseWrite
 	render.JSON(w, r, config.UserStatsRepository.ToModel(entry))
 }
 
+// @Summary Delete a UserStats
+// @Description Delete a UserStats
+// @Tags UserStats
+// @Accept json
+// @Produce json
+// @Param id path int true "UserStats ID"
+// @Success 200 {object} map[string]string
+// @Router /userStats/{id} [delete]
 func (config *UserStatsConfigurator) DeleteCategoryHandler(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")
 	id, err := strconv.Atoi(idStr)

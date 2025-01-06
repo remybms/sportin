@@ -21,6 +21,14 @@ func New(configuration *config.Config) *CategoriesConfigurator {
 	return &CategoriesConfigurator{configuration}
 }
 
+// @Summary Create a new category
+// @Description Create a new category
+// @Tags Category
+// @Accept json
+// @Produce json
+// @Param Category body model.CategoryRequest true "Category object that needs to be created"
+// @Success 200 {object} model.CategoryResponse
+// @Router /categories [post]
 func (config *CategoriesConfigurator) CreateCategoryHandler(w http.ResponseWriter, r *http.Request) {
 	req := &model.CategoryRequest{}
 	if err := render.Bind(r, req); err != nil {
@@ -34,6 +42,13 @@ func (config *CategoriesConfigurator) CreateCategoryHandler(w http.ResponseWrite
 	render.JSON(w, r, config.CategoryEntryRepository.ToModel(categoryEntry))
 }
 
+// @Summary Get all categries
+// @Description Get all categories
+// @Tags Category
+// @Accept json
+// @Produce json
+// @Success 200 {object} []model.CategoryResponse
+// @Router /categories [get]
 func (config *CategoriesConfigurator) GetAllCategoriesHandler(w http.ResponseWriter, r *http.Request) {
 	entries, err := config.CategoryEntryRepository.FindAll()
 	if err != nil {
@@ -50,6 +65,13 @@ func (config *CategoriesConfigurator) GetAllCategoriesHandler(w http.ResponseWri
 	render.JSON(w, r, responseEntries)
 }
 
+// @Summary Get a categry
+// @Description Get a category
+// @Tags Category
+// @Accept json
+// @Produce json
+// @Success 200 {object} model.CategoryResponse
+// @Router /categories/{id} [get]
 func (config *CategoriesConfigurator) GetCategoryHandler(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")
 	id, err := strconv.Atoi(idStr)
@@ -66,6 +88,13 @@ func (config *CategoriesConfigurator) GetCategoryHandler(w http.ResponseWriter, 
 	render.JSON(w, r, config.CategoryEntryRepository.ToModel(entry))
 }
 
+// @Summary Update a categry
+// @Description Update a category
+// @Tags Category
+// @Accept json
+// @Produce json
+// @Success 200 {object} model.CategoryResponse
+// @Router /categories/{id} [put]
 func (config *CategoriesConfigurator) UpdateCategoryHandler(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")
 	id, err := strconv.Atoi(idStr)
@@ -99,6 +128,13 @@ func (config *CategoriesConfigurator) UpdateCategoryHandler(w http.ResponseWrite
 	render.JSON(w, r, config.CategoryEntryRepository.ToModel(entry))
 }
 
+// @Summary Delete category
+// @Description Delete category
+// @Tags Category
+// @Accept json
+// @Produce json
+// @Success 200 {object} string
+// @Router /categories/{id} [delete]
 func (config *CategoriesConfigurator) DeleteCategoryHandler(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")
 	id, err := strconv.Atoi(idStr)

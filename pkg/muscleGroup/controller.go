@@ -21,6 +21,14 @@ func New(config *config.Config) *MuscleGroup {
 	return &MuscleGroup{config}
 }
 
+// @Summary Create a new muscle group
+// @Description Create a new muscle group
+// @Tags MuscleGroup
+// @Accept json
+// @Produce json
+// @Param muscleGroup body model.MuscleGroupRequest true "Muscle Group object that needs to be created"
+// @Success 200 {object} model.MuscleGroupResponse
+// @Router /muscleGroup [post]
 func (config *MuscleGroup) Create(w http.ResponseWriter, r *http.Request) {
 	request := &model.MuscleGroupRequest{}
 	if err := render.Bind(r, request); err != nil {
@@ -32,6 +40,14 @@ func (config *MuscleGroup) Create(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, r, config.MuscleGroupEntryRepository.ToModel(muscleGroup))
 }
 
+// @Summary Get muscle group
+// @Description Get muscle group
+// @Tags MuscleGroup
+// @Accept json
+// @Produce json
+// @Param id path int true "Muscle Group ID"
+// @Success 200 {object} model.MuscleGroupResponse
+// @Router /muscleGroup/{id} [get]
 func (config *MuscleGroup) Get(w http.ResponseWriter, r *http.Request) {
 	strId := chi.URLParam(r, "id")
 	if strId == "" {
@@ -50,6 +66,13 @@ func (config *MuscleGroup) Get(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, r, config.MuscleGroupEntryRepository.ToModel(muscleGroup))
 }
 
+// @Summary Get all muscle groups
+// @Description Get all muscle groups
+// @Tags MuscleGroup
+// @Accept json
+// @Produce json
+// @Success 200 {object} []model.MuscleGroupResponse
+// @Router /muscleGroup [get]
 func (config *MuscleGroup) GetAll(w http.ResponseWriter, r *http.Request) {
 	muscleGroups, err := config.MuscleGroupEntryRepository.FindAll()
 	if err != nil {
@@ -59,6 +82,14 @@ func (config *MuscleGroup) GetAll(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, r, config.MuscleGroupEntryRepository.ToModelList(muscleGroups))
 }
 
+// @Summary Update muscle group
+// @Description Update muscle group
+// @Tags MuscleGroup
+// @Accept json
+// @Produce json
+// @Param id path int true "Muscle Group ID"
+// @Success 200 {object} model.MuscleGroupResponse
+// @Router /muscleGroup/{id} [put]
 func (config *MuscleGroup) Update(w http.ResponseWriter, r *http.Request) {
 	strId := chi.URLParam(r, "id")
 	if strId == "" {
@@ -94,6 +125,14 @@ func (config *MuscleGroup) Update(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, r, config.MuscleGroupEntryRepository.ToModel(updatedMuscleGroup))
 }
 
+// @Summary Delete muscle group
+// @Description Delete muscle group
+// @Tags MuscleGroup
+// @Accept json
+// @Produce json
+// @Param id path int true "Muscle Group ID"
+// @Success 200 {object} string
+// @Router /muscleGroup/{id} [delete]
 func (config *MuscleGroup) Delete(w http.ResponseWriter, r *http.Request) {
 	strId := chi.URLParam(r, "id")
 	if strId == "" {

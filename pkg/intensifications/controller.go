@@ -21,6 +21,14 @@ func New(configuration *config.Config) *IntensificationsConfigurator {
 	return &IntensificationsConfigurator{configuration}
 }
 
+// @Summary Create a new Intensification
+// @Description Create a new Intensification
+// @Tags Intensification
+// @Accept json
+// @Produce json
+// @Param exercise body model.IntensificationRequest true "Exercise object that needs to be created"
+// @Success 200 {object} model.IntensificationResponse
+// @Router /intensifications [post]
 func (config *IntensificationsConfigurator) CreateIntensificationHandler(w http.ResponseWriter, r *http.Request) {
 	req := &model.IntensificationRequest{}
 	if err := render.Bind(r, req); err != nil {
@@ -34,6 +42,14 @@ func (config *IntensificationsConfigurator) CreateIntensificationHandler(w http.
 	render.JSON(w, r, config.IntensificationEntryRepository.ToModel(intensificationEntry))
 }
 
+// @Summary Get all Intensification
+// @Description Get all Intensification
+// @Tags Intensification
+// @Accept json
+// @Produce json
+// @Param Category body model.IntensificationRequest true "Intensification object that needs to be created"
+// @Success 200 {object} model.IntensificationResponse
+// @Router /intensifications [get]
 func (config *IntensificationsConfigurator) GetAllIntensificationsHandler(w http.ResponseWriter, r *http.Request) {
 	entries, err := config.IntensificationEntryRepository.FindAll()
 	if err != nil {
@@ -50,6 +66,14 @@ func (config *IntensificationsConfigurator) GetAllIntensificationsHandler(w http
 	render.JSON(w, r, responseEntries)
 }
 
+// @Summary Get Intensification
+// @Description Get Intensification
+// @Tags Intensification
+// @Accept json
+// @Produce json
+// @Param id path int true "Intensification ID"
+// @Success 200 {object} model.IntensificationResponse
+// @Router /intensifications/{id} [get]
 func (config *IntensificationsConfigurator) GetIntensificationHandler(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")
 	id, err := strconv.Atoi(idStr)
@@ -66,6 +90,15 @@ func (config *IntensificationsConfigurator) GetIntensificationHandler(w http.Res
 	render.JSON(w, r, config.IntensificationEntryRepository.ToModel(entry))
 }
 
+// @Summary Update Intensification
+// @Description Update Intensification
+// @Tags Intensification
+// @Accept json
+// @Produce json
+// @Param id path int true "Intensification ID"
+// @Param intensification body model.IntensificationRequest true "Intensification object that needs to be updated"
+// @Success 200 {object} model.IntensificationResponse
+// @Router /intensifications/{id} [put]
 func (config *IntensificationsConfigurator) UpdateIntensificationHandler(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")
 	id, err := strconv.Atoi(idStr)
@@ -99,6 +132,14 @@ func (config *IntensificationsConfigurator) UpdateIntensificationHandler(w http.
 	render.JSON(w, r, config.IntensificationEntryRepository.ToModel(entry))
 }
 
+// @Summary Delete Intensification
+// @Description Delete Intensification
+// @Tags Intensification
+// @Accept json
+// @Produce json
+// @Param id path int true "Intensification ID"
+// @Success 200 {object} string
+// @Router /intensifications/{id} [delete]
 func (config *IntensificationsConfigurator) DeleteIntensificationHandler(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")
 	id, err := strconv.Atoi(idStr)

@@ -1,4 +1,109 @@
+basePath: /api/v1
 definitions:
+  model.CategoryRequest:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+    type: object
+  model.CategoryResponse:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  model.ExerciseRequest:
+    properties:
+      description:
+        type: string
+      muscle_group_id:
+        type: integer
+      name:
+        type: string
+      user_id:
+        type: integer
+      weight_increment:
+        type: integer
+    type: object
+  model.ExerciseResponse:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      muscle_group_id:
+        type: integer
+      name:
+        type: string
+      user_id:
+        type: integer
+      weight_increment:
+        type: integer
+    type: object
+  model.IntensificationRequest:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+    type: object
+  model.IntensificationResponse:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  model.MuscleGroupRequest:
+    properties:
+      body_part:
+        type: string
+      description:
+        type: string
+      level:
+        type: string
+      name:
+        type: string
+    type: object
+  model.MuscleGroupResponse:
+    properties:
+      body_part:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      level:
+        type: string
+      name:
+        type: string
+    type: object
+  model.MuscleRequest:
+    properties:
+      description:
+        type: string
+      muscle_group_id:
+        type: integer
+      name:
+        type: string
+    type: object
+  model.MuscleResponse:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      muscle_group_id:
+        type: integer
+      name:
+        type: string
+    type: object
   model.ProgramRequest:
     properties:
       category_id:
@@ -19,14 +124,572 @@ definitions:
       name:
         type: string
     type: object
+  model.UserRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  model.UserResponse:
+    properties:
+      email:
+        type: string
+      id:
+        type: integer
+      username:
+        type: string
+    type: object
+  model.UserStatsRequest:
+    properties:
+      activity:
+        type: integer
+      age:
+        type: integer
+      calories_goal:
+        type: integer
+      height:
+        type: integer
+      protein_ratio:
+        type: integer
+      user_id:
+        type: integer
+      weight:
+        type: integer
+    type: object
+  model.UserStatsResponse:
+    properties:
+      activity:
+        type: integer
+      age:
+        type: integer
+      calories_goal:
+        type: integer
+      height:
+        type: integer
+      id:
+        type: integer
+      protein_ratio:
+        type: integer
+      weight:
+        type: integer
+    type: object
+host: localhost:8080
 info:
   contact: {}
+  description: This is a sample server for a sport application.
+  title: Sportin API
+  version: "1.0"
 paths:
-  /programs:
+  /categories:
+    get:
+      consumes:
+      - application/json
+      description: Get all categories
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.CategoryResponse'
+            type: array
+      summary: Get all categries
+      tags:
+      - Category
     post:
       consumes:
       - application/json
-      description: Create a program
+      description: Create a new category
+      parameters:
+      - description: Category object that needs to be created
+        in: body
+        name: Category
+        required: true
+        schema:
+          $ref: '#/definitions/model.CategoryRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.CategoryResponse'
+      summary: Create a new category
+      tags:
+      - Category
+  /categories/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete category
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Delete category
+      tags:
+      - Category
+    get:
+      consumes:
+      - application/json
+      description: Get a category
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.CategoryResponse'
+      summary: Get a categry
+      tags:
+      - Category
+    put:
+      consumes:
+      - application/json
+      description: Update a category
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.CategoryResponse'
+      summary: Update a categry
+      tags:
+      - Category
+  /exercise:
+    get:
+      consumes:
+      - application/json
+      description: Get exercise
+      parameters:
+      - description: Exercise ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.ExerciseResponse'
+            type: array
+      summary: Get exercise
+      tags:
+      - Exercise
+    post:
+      consumes:
+      - application/json
+      description: Delete a new exercise
+      parameters:
+      - description: Exercise object that needs to be created
+        in: body
+        name: exercise
+        required: true
+        schema:
+          $ref: '#/definitions/model.ExerciseRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ExerciseResponse'
+      summary: Create a new exercise
+      tags:
+      - Exercise
+  /exercise/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a new exercise
+      parameters:
+      - description: Exercise ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Delete a new exercise
+      tags:
+      - Exercise
+    put:
+      consumes:
+      - application/json
+      description: Update a new exercise
+      parameters:
+      - description: Exercise ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Exercise object that needs to be updated
+        in: body
+        name: exercise
+        required: true
+        schema:
+          $ref: '#/definitions/model.ExerciseRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ExerciseResponse'
+      summary: Update a new exercise
+      tags:
+      - Exercise
+  /intensifications:
+    get:
+      consumes:
+      - application/json
+      description: Get all Intensification
+      parameters:
+      - description: Intensification object that needs to be created
+        in: body
+        name: Category
+        required: true
+        schema:
+          $ref: '#/definitions/model.IntensificationRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.IntensificationResponse'
+      summary: Get all Intensification
+      tags:
+      - Intensification
+    post:
+      consumes:
+      - application/json
+      description: Create a new Intensification
+      parameters:
+      - description: Exercise object that needs to be created
+        in: body
+        name: exercise
+        required: true
+        schema:
+          $ref: '#/definitions/model.IntensificationRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.IntensificationResponse'
+      summary: Create a new Intensification
+      tags:
+      - Intensification
+  /intensifications/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Intensification
+      parameters:
+      - description: Intensification ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Delete Intensification
+      tags:
+      - Intensification
+    get:
+      consumes:
+      - application/json
+      description: Get Intensification
+      parameters:
+      - description: Intensification ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.IntensificationResponse'
+      summary: Get Intensification
+      tags:
+      - Intensification
+    put:
+      consumes:
+      - application/json
+      description: Update Intensification
+      parameters:
+      - description: Intensification ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Intensification object that needs to be updated
+        in: body
+        name: intensification
+        required: true
+        schema:
+          $ref: '#/definitions/model.IntensificationRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.IntensificationResponse'
+      summary: Update Intensification
+      tags:
+      - Intensification
+  /muscle:
+    get:
+      consumes:
+      - application/json
+      description: Get all muscles
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.MuscleResponse'
+            type: array
+      summary: Get all muscles
+      tags:
+      - Muscle
+    post:
+      consumes:
+      - application/json
+      description: Create a new muscle
+      parameters:
+      - description: Muscle object that needs to be created
+        in: body
+        name: muscle
+        required: true
+        schema:
+          $ref: '#/definitions/model.MuscleRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.MuscleResponse'
+      summary: Create a new muscle
+      tags:
+      - Muscle
+  /muscle/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete muscle
+      parameters:
+      - description: Muscle ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Delete muscle
+      tags:
+      - Muscle
+    get:
+      consumes:
+      - application/json
+      description: Get muscle
+      parameters:
+      - description: Muscle ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.MuscleResponse'
+      summary: Get muscle
+      tags:
+      - Muscle
+    put:
+      consumes:
+      - application/json
+      description: Update muscle
+      parameters:
+      - description: Muscle ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Muscle object that needs to be updated
+        in: body
+        name: muscle
+        required: true
+        schema:
+          $ref: '#/definitions/model.MuscleRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.MuscleResponse'
+      summary: Update muscle
+      tags:
+      - Muscle
+  /muscleGroup:
+    get:
+      consumes:
+      - application/json
+      description: Get all muscle groups
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.MuscleGroupResponse'
+            type: array
+      summary: Get all muscle groups
+      tags:
+      - MuscleGroup
+    post:
+      consumes:
+      - application/json
+      description: Create a new muscle group
+      parameters:
+      - description: Muscle Group object that needs to be created
+        in: body
+        name: muscleGroup
+        required: true
+        schema:
+          $ref: '#/definitions/model.MuscleGroupRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.MuscleGroupResponse'
+      summary: Create a new muscle group
+      tags:
+      - MuscleGroup
+  /muscleGroup/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete muscle group
+      parameters:
+      - description: Muscle Group ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Delete muscle group
+      tags:
+      - MuscleGroup
+    get:
+      consumes:
+      - application/json
+      description: Get muscle group
+      parameters:
+      - description: Muscle Group ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.MuscleGroupResponse'
+      summary: Get muscle group
+      tags:
+      - MuscleGroup
+    put:
+      consumes:
+      - application/json
+      description: Update muscle group
+      parameters:
+      - description: Muscle Group ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.MuscleGroupResponse'
+      summary: Update muscle group
+      tags:
+      - MuscleGroup
+  /programs:
+    get:
+      consumes:
+      - application/json
+      description: Get all programs
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.ProgramResponse'
+            type: array
+      summary: Get all programs
+      tags:
+      - Program
+    post:
+      consumes:
+      - application/json
+      description: Create a new program
       parameters:
       - description: Program object that needs to be created
         in: body
@@ -41,7 +704,260 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/model.ProgramResponse'
-      summary: Create a program
+      summary: Create a new program
       tags:
       - Program
+  /programs/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a program
+      parameters:
+      - description: Program ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Delete a program
+      tags:
+      - Program
+    get:
+      consumes:
+      - application/json
+      description: Get program
+      parameters:
+      - description: Program ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ProgramResponse'
+      summary: Get program
+      tags:
+      - Program
+    put:
+      consumes:
+      - application/json
+      description: Update a program
+      parameters:
+      - description: Program ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Program object that needs to be updated
+        in: body
+        name: program
+        required: true
+        schema:
+          $ref: '#/definitions/model.ProgramRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ProgramResponse'
+      summary: Update a program
+      tags:
+      - Program
+  /userStats:
+    get:
+      consumes:
+      - application/json
+      description: Get all UserStats
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.UserStatsResponse'
+            type: array
+      summary: Get all UserStats
+      tags:
+      - UserStats
+    post:
+      consumes:
+      - application/json
+      description: Create a new UserStats
+      parameters:
+      - description: UserStats object that needs to be created
+        in: body
+        name: userStats
+        required: true
+        schema:
+          $ref: '#/definitions/model.UserStatsRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.UserStatsResponse'
+      summary: Create a new UserStats
+      tags:
+      - UserStats
+  /userStats/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a UserStats
+      parameters:
+      - description: UserStats ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete a UserStats
+      tags:
+      - UserStats
+    get:
+      consumes:
+      - application/json
+      description: Get UserStats
+      parameters:
+      - description: UserStats ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.UserStatsResponse'
+      summary: Get UserStats
+      tags:
+      - UserStats
+    put:
+      consumes:
+      - application/json
+      description: Update a UserStats
+      parameters:
+      - description: UserStats ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: UserStats object that needs to be updated
+        in: body
+        name: userStats
+        required: true
+        schema:
+          $ref: '#/definitions/model.UserStatsRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.UserStatsResponse'
+      summary: Update a UserStats
+      tags:
+      - UserStats
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: Get all users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.UserResponse'
+            type: array
+      summary: Get all users
+      tags:
+      - User
+    post:
+      consumes:
+      - application/json
+      description: Create a new user
+      parameters:
+      - description: User object that needs to be created
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/model.UserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.UserResponse'
+      summary: Create a new user
+      tags:
+      - User
+  /users/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete user
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Delete user
+      tags:
+      - User
+    get:
+      consumes:
+      - application/json
+      description: Get user
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.UserResponse'
+      summary: Get user
+      tags:
+      - User
 swagger: "2.0"
