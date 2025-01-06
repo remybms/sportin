@@ -85,5 +85,8 @@ func (r *muscleGroupEntryRepository) ToModelList(muscleGroupEntries []*MuscleGro
 	for _, entry := range muscleGroupEntries {
 		responses = append(responses, r.ToModel(entry))
 	}
+	if len(responses) == 0 {
+		return []*model.MuscleGroupResponse{}
+	}
 	return responses
 }

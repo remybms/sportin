@@ -17,19 +17,19 @@ func AuthMiddleware(secret string) func(http.Handler) http.Handler {
 
 			authHeader = authHeader[len("Bearer "):]
 
-			email, err := ValidateJWTToken(secret, authHeader)
+			id, err := ValidateJWTToken(secret, authHeader)
 			if err != nil {
 				http.Error(w, "Invalid token", http.StatusUnauthorized)
 				return
 			}
 
-			ctx := context.WithValue(r.Context(), "email", email)
+			ctx := context.WithValue(r.Context(), "id", id)
 			next.ServeHTTP(w, r.WithContext(ctx))
 		})
 	}
 }
 
 func GetUserFromContext(ctx context.Context) string {
-	email, _ := ctx.Value("email").(string)
-	return email
+	id, _ := ctx.Value("id").(string)
+	return id
 }

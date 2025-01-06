@@ -9,25 +9,24 @@ import (
 
 func GenerateJWTToken(secret string, userEntry *dbmodel.UserEntry) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"email": userEntry.Email,
-		"id":    userEntry.ID,
-		"exp":   jwt.TimeFunc().Add(24 * time.Hour).Unix(),
+		"id":  userEntry.ID,
+		"exp": jwt.TimeFunc().Add(24 * time.Hour).Unix(),
 	})
 	return token.SignedString([]byte(secret))
 }
 
-func ValidateJWTToken(secret, tokenString string) (string, error) {
+func ValidateJWTToken(secret, tokenString string) (float64, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		return []byte(secret), nil
 	})
 
 	if err != nil {
-		return "", err
+		return 0, err
 	}
 
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		return claims["email"].(string), nil
+		return claims["id"].(float64), nil
 	}
 
-	return "", err
+	return 0, err
 }
