@@ -10,7 +10,7 @@ import (
 func Routes(config *config.Config, userRepository dbmodel.UserRepository) *chi.Mux {
 	router := chi.NewRouter()
 
-	userController := New(config, userRepository)
+	userController := New(config)
 
 	router.Post("/", userController.CreateUserHandler)
 	router.Get("/", userController.GetUsersHandler)
