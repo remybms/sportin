@@ -16,7 +16,10 @@ import (
 	userstats "sportin/pkg/userStats"
 	"sportin/pkg/users"
 
+	_ "sportin/docs"
+
 	"github.com/go-chi/chi/v5"
+	httpSwagger "github.com/swaggo/http-swagger"
 )
 
 func Routes(configuration *config.Config, userRepository dbmodel.UserRepository) *chi.Mux {
@@ -35,6 +38,12 @@ func Routes(configuration *config.Config, userRepository dbmodel.UserRepository)
 	return router
 }
 
+// @title Sportin API
+// @version 1.0
+// @description This is a sample server for a sport application.
+// @host localhost:8080
+// @BasePath /api/v1
+
 func main() {
 	configuration, err := config.New()
 	if err != nil {
@@ -44,6 +53,7 @@ func main() {
 	userRepository := configuration.UserRepository
 
 	router := Routes(configuration, userRepository)
+	router.Get("/swagger/*", httpSwagger.WrapHandler)
 
 	log.Fatal(http.ListenAndServe(":8080", router))
 }

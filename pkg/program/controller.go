@@ -21,6 +21,14 @@ func New(configuration *config.Config) *ProgramConfig {
 	return &ProgramConfig{configuration}
 }
 
+// @Summary Create a program
+// @Description Create a program
+// @Tags Program
+// @Accept json
+// @Produce json
+// @Param program body model.ProgramRequest true "Program object that needs to be created"
+// @Success 200 {object} model.ProgramResponse
+// @Router /programs [post]
 func (config *ProgramConfig) CreateProgramHandler(w http.ResponseWriter, r *http.Request) {
 	req := &model.ProgramRequest{}
 	if err := render.Bind(r, req); err != nil {
