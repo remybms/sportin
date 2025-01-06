@@ -1,10 +1,13 @@
 package categories
 
 import (
+	"encoding/json"
 	"net/http"
 	"sportin/config"
 	"sportin/database/dbmodel"
-	"sportin/pkg/models"
+	"sportin/helper"
+	"sportin/pkg/model"
+	"strconv"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/render"
@@ -18,68 +21,101 @@ func New(configuration *config.Config) *CategoriesConfigurator {
 	return &CategoriesConfigurator{configuration}
 }
 
-func categoriesToModel(categories []*dbmodel.Categories) []models.Categories {
-	categoriesToModel := &models.Categories{}
-	categoriesEdited := []models.Categories{}
-	for _, category := range categories {
-		categoriesToModel.Name = category.Name
-		categoriesToModel.Description = category.Description
-		categoriesEdited = append(categoriesEdited, *categoriesToModel)
-	}
-	return categoriesEdited
-}
-
-func (config *CategoriesConfigurator) addCategoryHandler(w http.ResponseWriter, r *http.Request) {
-	req := &models.Categories{}
+func (config *CategoriesConfigurator) CreateCategoryHandler(w http.ResponseWriter, r *http.Request) {
+	req := &model.CategoryRequest{}
 	if err := render.Bind(r, req); err != nil {
-		render.JSON(w, r, map[string]string{"error": err.Error()})
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	addCategory := &dbmodel.Categories{Name: req.Name, Description: req.Description}
-	config.CategoriesRepository.Create(addCategory)
-	render.JSON(w, r, map[string]string{"success": "New category successfully added"})
+
+	categoryEntry := &dbmodel.CategoryEntry{Name: req.Name, Description: req.Description}
+	config.CategoryEntryRepository.Create(categoryEntry)
+
+	render.JSON(w, r, config.CategoryEntryRepository.ToModel(categoryEntry))
 }
 
-func (config *CategoriesConfigurator) categoriesHandler(w http.ResponseWriter, r *http.Request) {
-	categories, err := config.CategoriesRepository.FindAll()
-	categoriesEdited := categoriesToModel(categories)
+func (config *CategoriesConfigurator) GetAllCategoriesHandler(w http.ResponseWriter, r *http.Request) {
+	entries, err := config.CategoryEntryRepository.FindAll()
 	if err != nil {
-		render.JSON(w, r, map[string]string{"Error": "Failed to load all the categories"})
+		http.Error(w, "Failed to retrieves all categories", http.StatusInternalServerError)
 		return
 	}
-	render.JSON(w, r, categoriesEdited)
+
+	responseEntries := make([]*model.CategoryResponse, len(entries))
+
+	for i, entry := range entries {
+		responseEntries[i] = config.CategoryEntryRepository.ToModel(entry)
+	}
+
+	render.JSON(w, r, responseEntries)
 }
 
-func (config *CategoriesConfigurator) categoryByIdHandler(w http.ResponseWriter, r *http.Request) {
-	categoryId := chi.URLParam(r, "id")
-	category, err := config.CategoriesRepository.FindById(categoryId)
-	categoryEdited := categoriesToModel(category)
+func (config *CategoriesConfigurator) GetCategoryHandler(w http.ResponseWriter, r *http.Request) {
+	idStr := chi.URLParam(r, "id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil || id < 0 {
+		http.Error(w, "Invalid id parameter", http.StatusBadRequest)
+		return
+	}
+	entry, err := config.CategoryEntryRepository.FindById(id)
 	if err != nil {
-		render.JSON(w, r, map[string]string{"Error": "Failed to load the wanted category"})
+		http.Error(w, "Failed to retrieve category on this id", http.StatusInternalServerError)
 		return
 	}
-	render.JSON(w, r, categoryEdited)
+
+	render.JSON(w, r, config.CategoryEntryRepository.ToModel(entry))
 }
 
-func (config *CategoriesConfigurator) editCategoryHandler(w http.ResponseWriter, r *http.Request) {
-	req := &models.Categories{}
-	categoryId := chi.URLParam(r, "id")
-	if err := render.Bind(r, req); err != nil {
-		render.JSON(w, r, map[string]string{"error": err.Error()})
+func (config *CategoriesConfigurator) UpdateCategoryHandler(w http.ResponseWriter, r *http.Request) {
+	idStr := chi.URLParam(r, "id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil || id < 0 {
+		http.Error(w, "Invalid id parameter", http.StatusBadRequest)
 		return
 	}
-	updatedCategory := &dbmodel.Categories{Name: req.Name, Description: req.Description}
-	config.CategoriesRepository.Update(updatedCategory, categoryId)
-	render.JSON(w, r, map[string]string{"success": "Category successfully updated"})
-}
 
-func (config *CategoriesConfigurator) deleteCategoryHandler(w http.ResponseWriter, r *http.Request) {
-	categoryId := chi.URLParam(r, "id")
-	category, err := config.CategoriesRepository.FindById(categoryId)
+	entry, err := config.CategoryEntryRepository.FindById(id)
 	if err != nil {
-		render.JSON(w, r, map[string]string{"Error": "Failed to find the wanted category"})
+		http.Error(w, "Failed to retrieve category on this id", http.StatusInternalServerError)
 		return
 	}
-	config.CategoriesRepository.Delete(category[0])
-	render.JSON(w, r, map[string]string{"success": "Category successfully deleted"})
+
+	var data map[string]interface{}
+
+	err = json.NewDecoder(r.Body).Decode(&data)
+	if err != nil {
+		http.Error(w, "Cannot decode body", http.StatusInternalServerError)
+		return
+	}
+
+	helper.ApplyChanges(data, entry)
+
+	entry, err = config.CategoryEntryRepository.Update(entry)
+	if err != nil {
+		http.Error(w, "Failed to update category on this id", http.StatusInternalServerError)
+		return
+	}
+
+	render.JSON(w, r, config.CategoryEntryRepository.ToModel(entry))
+}
+
+func (config *CategoriesConfigurator) DeleteCategoryHandler(w http.ResponseWriter, r *http.Request) {
+	idStr := chi.URLParam(r, "id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil || id < 0 {
+		http.Error(w, "Invalid id parameter", http.StatusBadRequest)
+		return
+	}
+
+	valid, err := config.CategoryEntryRepository.Delete(id)
+	if err != nil {
+		http.Error(w, "Failed to delete category on this id", http.StatusInternalServerError)
+		return
+	}
+
+	if !valid {
+		http.Error(w, "Category does not exist", http.StatusNotFound)
+		return
+	}
+	render.JSON(w, r, map[string]string{"message": "Category deleted"})
 }

@@ -6,7 +6,7 @@ import (
 	"sportin/config"
 	"sportin/database/dbmodel"
 	"sportin/helper"
-	"sportin/pkg/models"
+	"sportin/pkg/model"
 	"strconv"
 
 	"github.com/go-chi/chi/v5"
@@ -22,13 +22,13 @@ func New(configuration *config.Config) *ProgramConfig {
 }
 
 func (config *ProgramConfig) CreateProgramHandler(w http.ResponseWriter, r *http.Request) {
-	req := &models.ProgramRequest{}
+	req := &model.ProgramRequest{}
 	if err := render.Bind(r, req); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	programEntry := &dbmodel.ProgramEntry{Name: req.Name, Description: req.Description}
+	programEntry := &dbmodel.ProgramEntry{UserID: req.UserID, CategoryID: req.CategoryID, Name: req.Name, Description: req.Description}
 	config.ProgramEntryRepository.Create(programEntry)
 
 	render.JSON(w, r, config.ProgramEntryRepository.ToModel(programEntry))
@@ -41,7 +41,7 @@ func (config *ProgramConfig) GetAllProgramsHandler(w http.ResponseWriter, r *htt
 		return
 	}
 
-	responseEntries := make([]*models.ProgramResponse, len(entries))
+	responseEntries := make([]*model.ProgramResponse, len(entries))
 
 	for i, entry := range entries {
 		responseEntries[i] = config.ProgramEntryRepository.ToModel(entry)

@@ -1,26 +1,26 @@
-package models
+package model
 
 import (
 	"errors"
 	"net/http"
 )
 
-type ProgramRequest struct {
+type CategoryRequest struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
 }
 
-type ProgramResponse struct {
+type CategoryResponse struct {
 	ID          int    `json:"id"`
 	Name        string `json:"name"`
 	Description string `json:"description"`
 }
 
-func (program *ProgramRequest) Bind(r *http.Request) error {
-	if program.Name == "" {
+func (category *CategoryRequest) Bind(r *http.Request) error {
+	if category.Name == "" {
 		return errors.New("Name is required")
 	}
-	if program.Description == "" {
+	if category.Description == "" {
 		return errors.New("Description is required")
 	}
 	return nil
