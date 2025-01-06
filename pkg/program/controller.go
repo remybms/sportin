@@ -159,3 +159,31 @@ func (config *ProgramConfig) DeleteProgramHandler(w http.ResponseWriter, r *http
 	}
 	render.JSON(w, r, map[string]string{"message": "Program deleted"})
 }
+
+func (config *ProgramConfig) GetAllExercicesByProgram(w http.ResponseWriter, r *http.Request) {
+	idStr := chi.URLParam(r, "id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil || id < 0 {
+		http.Error(w, "Invalid id parameter", http.StatusBadRequest)
+		return
+	}
+
+	var programExercices model.ProgramExercise
+	exercises, err := config.ProgramExerciseEntryRepository.FindByProgramID(id)
+	if err != nil {
+		http.Error(w, "Failed to retrieve program on this id", http.StatusInternalServerError)
+		return
+	}
+
+	programExercices.Exercice = config.ExerciseEntryRepository.ToModelList(exercises)
+
+	entry, err := config.ProgramEntryRepository.FindByID(id)
+	if err != nil {
+		http.Error(w, "Failed to retrieve program on this id", http.StatusInternalServerError)
+		return
+	}
+
+	programExercices.Program = config.ProgramEntryRepository.ToModel(entry)
+
+	render.JSON(w, r, programExercices)
+}

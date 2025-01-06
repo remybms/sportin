@@ -18,6 +18,11 @@ type ProgramResponse struct {
 	Description string `json:"description"`
 }
 
+type ProgramExercise struct {
+	Program  *ProgramResponse
+	Exercice []*ExerciseResponse
+}
+
 func (program *ProgramRequest) Bind(r *http.Request) error {
 	if program.UserID < 0 {
 		return errors.New("Invalid user id")
