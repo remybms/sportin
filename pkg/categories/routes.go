@@ -2,6 +2,7 @@ package categories
 
 import (
 	"sportin/config"
+	"sportin/pkg/authentification"
 
 	"github.com/go-chi/chi/v5"
 )
@@ -9,10 +10,13 @@ import (
 func Routes(configuration *config.Config) chi.Router {
 	CategoryConfigurator := New(configuration)
 	router := chi.NewRouter()
-	router.Post("/", CategoryConfigurator.CreateCategoryHandler)
-	router.Get("/", CategoryConfigurator.GetAllCategoriesHandler)
-	router.Get("/{id}", CategoryConfigurator.GetCategoryHandler)
-	router.Put("/{id}", CategoryConfigurator.UpdateCategoryHandler)
-	router.Delete("/{id}", CategoryConfigurator.DeleteCategoryHandler)
+	router.Group(func(r chi.Router) {
+		r.Use(authentification.AuthMiddleware("your_secret_key"))
+		r.Post("/", CategoryConfigurator.CreateCategoryHandler)
+		r.Get("/", CategoryConfigurator.GetAllCategoriesHandler)
+		r.Get("/{id}", CategoryConfigurator.GetCategoryHandler)
+		r.Put("/{id}", CategoryConfigurator.UpdateCategoryHandler)
+		r.Delete("/{id}", CategoryConfigurator.DeleteCategoryHandler)
+	})
 	return router
 }
