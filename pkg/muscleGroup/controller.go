@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"sportin/config"
 	"sportin/database/dbmodel"
+	"sportin/helper"
 	"sportin/pkg/models"
 	"strconv"
 
@@ -67,22 +68,19 @@ func (config *MuscleGroup) Update(w http.ResponseWriter, r *http.Request) {
 	if err != nil || id < 1 {
 		http.Error(w, "Invalid id parameter", http.StatusBadRequest)
 	}
-	request := &models.MuscleGroupRequest{}
-	if err := render.Bind(r, request); err != nil {
-		http.Error(w, "Invalid request payload", http.StatusBadRequest)
-		return
-	}
+	var data map[string]interface{}
 	muscleGroup, err := config.MuscleGroupEntryRepository.FindById(id)
 	if err != nil {
 		http.Error(w, "Muscle group not found", http.StatusNotFound)
 		return
 	}
-	muscleGroup.Name = request.Name
-	muscleGroup.BodyPart = request.BodyPart
-	muscleGroup.Description = request.Description
-	muscleGroup.Level = request.Level
-	config.MuscleGroupEntryRepository.Update(muscleGroup)
-	render.JSON(w, r, config.MuscleGroupEntryRepository.ToModel(muscleGroup))
+	helper.ApplyChanges(data, muscleGroup)
+	updatedMuscleGroup, err := config.MuscleGroupEntryRepository.Update(muscleGroup)
+	if err != nil {
+		render.JSON(w, r, map[string]string{"error": "Failed to update user"})
+		return
+	}
+	render.JSON(w, r, config.MuscleGroupEntryRepository.ToModel(updatedMuscleGroup))
 }
 
 func (config *MuscleGroup) Delete(w http.ResponseWriter, r *http.Request) {
