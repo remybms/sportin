@@ -12,8 +12,9 @@ type Config struct {
 	DB                         *gorm.DB
 	MuscleGroupEntryRepository dbmodel.MuscleGroupEntryRepository
 	UserRepository             dbmodel.UserRepository
-	StatsRepository            dbmodel.StatsRepository
-	CategoriesRepository       dbmodel.CategoriesRepository
+	UserStatsRepository        dbmodel.UserStatsRepository
+	CategoryEntryRepository    dbmodel.CategoryEntryRepository
+	ProgramEntryRepository     dbmodel.ProgramEntryRepository
 	MuscleEntryRepository      dbmodel.MuscleEntryRepository
 }
 
@@ -26,11 +27,11 @@ func New() (*Config, error) {
 	}
 
 	database.Migrate(databaseSession)
-	config.CategoriesRepository = dbmodel.NewCategoriesRepository(databaseSession)
+	config.CategoryEntryRepository = dbmodel.NewCategoryRepository(databaseSession)
 	config.UserRepository = dbmodel.NewUserRepository(databaseSession)
-	config.StatsRepository = dbmodel.NewStatsRepository(databaseSession)
+	config.UserStatsRepository = dbmodel.NewUserStatsRepository(databaseSession)
 	config.MuscleGroupEntryRepository = dbmodel.NewMuscleGroupEntryRepository(databaseSession)
-	config.MuscleEntryRepository = dbmodel.NewMuscleEntryRepository(databaseSession)
+	config.ProgramEntryRepository = dbmodel.NewProgramEntryRepository(databaseSession)
 
 	return &config, nil
 }

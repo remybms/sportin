@@ -22,7 +22,7 @@ func New(config *config.Config) *MuscleGroup {
 }
 
 func (config *MuscleGroup) Create(w http.ResponseWriter, r *http.Request) {
-	request := &models.MuscleGroupRequest{}
+	request := &model.MuscleGroupRequest{}
 	if err := render.Bind(r, request); err != nil {
 		http.Error(w, "Invalid request payload", http.StatusBadRequest)
 		return
@@ -68,6 +68,11 @@ func (config *MuscleGroup) Update(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(strId)
 	if err != nil || id < 1 {
 		http.Error(w, "Invalid id parameter", http.StatusBadRequest)
+	}
+	request := &models.MuscleGroupRequest{}
+	if err := render.Bind(r, request); err != nil {
+		http.Error(w, "Invalid request payload", http.StatusBadRequest)
+		return
 	}
 	muscleGroup, err := config.MuscleGroupEntryRepository.FindById(id)
 	if err != nil {

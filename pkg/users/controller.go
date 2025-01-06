@@ -5,7 +5,7 @@ import (
 	"sportin/config"
 	"sportin/database/dbmodel"
 	"sportin/helper"
-	"sportin/pkg/models"
+	"sportin/pkg/model"
 	"strconv"
 
 	"github.com/go-chi/chi/v5"
@@ -22,7 +22,7 @@ func New(config *config.Config) *UserConfig {
 }
 
 func (config *UserConfig) CreateUserHandler(w http.ResponseWriter, r *http.Request) {
-	req := &models.UserRequest{}
+	req := &model.UserRequest{}
 	if err := render.Bind(r, req); err != nil {
 		render.JSON(w, r, map[string]string{"error": "Invalid request payload"})
 		return
@@ -34,7 +34,7 @@ func (config *UserConfig) CreateUserHandler(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	user := &dbmodel.User{
+	user := &dbmodel.UserEntry{
 		Username: req.Username,
 		Email:    req.Email,
 		Password: string(hashedPassword),
@@ -66,7 +66,7 @@ func (config *UserConfig) GetUserByIDHandler(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	user, err := config.UserRepository.FindByID(uint(userID))
+	user, err := config.UserRepository.FindByID(userID)
 	if err != nil {
 		render.JSON(w, r, map[string]string{"error": "User not found"})
 		return
@@ -76,7 +76,7 @@ func (config *UserConfig) GetUserByIDHandler(w http.ResponseWriter, r *http.Requ
 }
 
 func (config *UserConfig) UpdateUserHandler(w http.ResponseWriter, r *http.Request) {
-	req := &models.UserRequest{}
+	req := &model.UserRequest{}
 	if err := render.Bind(r, req); err != nil {
 		render.JSON(w, r, map[string]string{"error": "Invalid request payload"})
 		return
@@ -91,7 +91,7 @@ func (config *UserConfig) UpdateUserHandler(w http.ResponseWriter, r *http.Reque
 
 	var data map[string]interface{}
 
-	user, err := config.UserRepository.FindByID(uint(userID))
+	user, err := config.UserRepository.FindByID(userID)
 	if err != nil {
 		render.JSON(w, r, map[string]string{"error": "User not found"})
 		return
@@ -116,7 +116,7 @@ func (config *UserConfig) DeleteUserHandler(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-	if err := config.UserRepository.Delete(uint(userID)); err != nil {
+	if err := config.UserRepository.Delete(userID); err != nil {
 		render.JSON(w, r, map[string]string{"error": "Failed to delete user"})
 		return
 	}
