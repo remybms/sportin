@@ -4,10 +4,10 @@ import (
 	"log"
 	"net/http"
 	"sportin/config"
-	musclegroup "sportin/pkg/muscleGroup"
 	"sportin/database/dbmodel"
-	"sportin/pkg/users"
 	"sportin/pkg/categories"
+	musclegroup "sportin/pkg/muscleGroup"
+	"sportin/pkg/users"
 
 	"github.com/go-chi/chi/v5"
 )
@@ -16,9 +16,8 @@ func Routes(configuration *config.Config, userRepository dbmodel.UserRepository)
 	router := chi.NewRouter()
 
 	router.Mount("/api/v1/muscle-group", musclegroup.Routes(configuration))
-
-	router.Mount("/api/users", users.Routes(configuration, userRepository))
-	router.Mount("/api/categories", categories.Routes(configuration))
+	router.Mount("/api/v1/users", users.Routes(configuration, userRepository))
+	router.Mount("/api/v1/categories", categories.Routes(configuration))
 	return router
 }
 

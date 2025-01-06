@@ -7,24 +7,20 @@ import (
 	"sportin/pkg/models"
 	"strconv"
 
-	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/render"
 	"golang.org/x/crypto/bcrypt"
 )
 
-type UserController struct {
+type UserConfig struct {
 	*config.Config
-	UserRepository dbmodel.UserRepository
 }
 
-func New(config *config.Config, userRepository dbmodel.UserRepository) *UserController {
-	return &UserController{
-		Config:         config,
-		UserRepository: userRepository,
-	}
+func New(config *config.Config) *UserConfig {
+	return &UserConfig{config}
 }
 
-func (controller *UserController) CreateUserHandler(w http.ResponseWriter, r *http.Request) {
+func (config *UserConfig) CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 	req := &models.UserRequest{}
 	if err := render.Bind(r, req); err != nil {
 		render.JSON(w, r, map[string]string{"error": "Invalid request payload"})
@@ -43,25 +39,25 @@ func (controller *UserController) CreateUserHandler(w http.ResponseWriter, r *ht
 		Password: string(hashedPassword),
 	}
 
-	newUser, err := controller.UserRepository.Create(user)
+	newUser, err := config.UserRepository.Create(user)
 	if err != nil {
 		render.JSON(w, r, map[string]string{"error": "Failed to create user"})
 		return
 	}
 
-	render.JSON(w, r, models.NewUserResponse(newUser))
+	render.JSON(w, r, config.UserRepository.ToModel(newUser))
 }
-func (controller *UserController) GetUsersHandler(w http.ResponseWriter, r *http.Request) {
-	users, err := controller.UserRepository.FindAll()
+func (config *UserConfig) GetUsersHandler(w http.ResponseWriter, r *http.Request) {
+	users, err := config.UserRepository.FindAll()
 	if err != nil {
 		render.JSON(w, r, map[string]string{"error": "Failed to retrieve users"})
 		return
 	}
 
-	render.JSON(w, r, models.NewUserResponseList(users))
+	render.JSON(w, r, config.UserRepository.ToModelList(users))
 }
 
-func (controller *UserController) GetUserByIDHandler(w http.ResponseWriter, r *http.Request) {
+func (config *UserConfig) GetUserByIDHandler(w http.ResponseWriter, r *http.Request) {
 	userIDStr := chi.URLParam(r, "id")
 	userID, err := strconv.Atoi(userIDStr)
 	if err != nil {
@@ -69,16 +65,16 @@ func (controller *UserController) GetUserByIDHandler(w http.ResponseWriter, r *h
 		return
 	}
 
-	user, err := controller.UserRepository.FindByID(uint(userID))
+	user, err := config.UserRepository.FindByID(uint(userID))
 	if err != nil {
 		render.JSON(w, r, map[string]string{"error": "User not found"})
 		return
 	}
 
-	render.JSON(w, r, models.NewUserResponse(user))
+	render.JSON(w, r, config.UserRepository.ToModel(user))
 }
 
-func (controller *UserController) UpdateUserHandler(w http.ResponseWriter, r *http.Request) {
+func (config *UserConfig) UpdateUserHandler(w http.ResponseWriter, r *http.Request) {
 	req := &models.UserRequest{}
 	if err := render.Bind(r, req); err != nil {
 		render.JSON(w, r, map[string]string{"error": "Invalid request payload"})
@@ -92,7 +88,7 @@ func (controller *UserController) UpdateUserHandler(w http.ResponseWriter, r *ht
 		return
 	}
 
-	user, err := controller.UserRepository.FindByID(uint(userID))
+	user, err := config.UserRepository.FindByID(uint(userID))
 	if err != nil {
 		render.JSON(w, r, map[string]string{"error": "User not found"})
 		return
@@ -109,16 +105,16 @@ func (controller *UserController) UpdateUserHandler(w http.ResponseWriter, r *ht
 		user.Password = string(hashedPassword)
 	}
 
-	updatedUser, err := controller.UserRepository.Update(user)
+	_, err = config.UserRepository.Update(user)
 	if err != nil {
 		render.JSON(w, r, map[string]string{"error": "Failed to update user"})
 		return
 	}
 
-	render.JSON(w, r, models.NewUserResponse(updatedUser))
+	render.JSON(w, r, config.UserRepository.ToModel(user))
 }
 
-func (controller *UserController) DeleteUserHandler(w http.ResponseWriter, r *http.Request) {
+func (config *UserConfig) DeleteUserHandler(w http.ResponseWriter, r *http.Request) {
 	userIDStr := chi.URLParam(r, "id")
 	userID, err := strconv.Atoi(userIDStr)
 	if err != nil {
@@ -126,7 +122,7 @@ func (controller *UserController) DeleteUserHandler(w http.ResponseWriter, r *ht
 		return
 	}
 
-	if err := controller.UserRepository.Delete(uint(userID)); err != nil {
+	if err := config.UserRepository.Delete(uint(userID)); err != nil {
 		render.JSON(w, r, map[string]string{"error": "Failed to delete user"})
 		return
 	}
