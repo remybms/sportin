@@ -15,6 +15,7 @@ func Migrate(db *gorm.DB) {
 		&dbmodel.MuscleEntry{},
 		&dbmodel.CategoryEntry{},
 		&dbmodel.ProgramEntry{},
+		&dbmodel.ExerciseEntry{},
 		&dbmodel.IntensificationEntry{},
 	)
 	if err != nil {

@@ -8,11 +8,12 @@ import (
 
 type UserEntry struct {
 	gorm.Model
-	Username  string          `gorm:"column:username"`
-	Email     string          `gorm:"column:email"`
-	Password  string          `gorm:"column:password"`
-	UserStats *UserStatsEntry `gorm:"foreignKey:UserID"`
-	Programs  []*ProgramEntry `gorm:"foreignKey:UserID"`
+	Username  string           `gorm:"column:username"`
+	Email     string           `gorm:"column:email"`
+	Password  string           `gorm:"column:password"`
+	UserStats *UserStatsEntry  `gorm:"foreignKey:UserID"`
+	Programs  []*ProgramEntry  `gorm:"foreignKey:UserID"`
+	Exercises []*ExerciseEntry `gorm:"foreignKey:UserID"`
 }
 
 type UserRepository interface {
