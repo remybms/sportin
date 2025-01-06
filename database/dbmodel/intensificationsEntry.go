@@ -8,8 +8,9 @@ import (
 
 type IntensificationEntry struct {
 	gorm.Model
-	Name        string `gorm:"column:name"`
-	Description string `gorm:"column:description"`
+	Name        string       `gorm:"column:name"`
+	Description string       `gorm:"column:description"`
+	Sets        []*SetsEntry `gorm:"foreignKey:IntensificationID"`
 }
 
 type IntensificationEntryRepository interface {
