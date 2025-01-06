@@ -28,6 +28,8 @@ func New(configuration *config.Config) *IntensificationsConfigurator {
 // @Produce json
 // @Param exercise body model.IntensificationRequest true "Exercise object that needs to be created"
 // @Success 200 {object} model.IntensificationResponse
+// @Failure 400 {string} string "Invalid request payload"
+// @Failure 500 {string} string "Failed to create intensification"
 // @Router /intensifications [post]
 func (config *IntensificationsConfigurator) CreateIntensificationHandler(w http.ResponseWriter, r *http.Request) {
 	req := &model.IntensificationRequest{}
@@ -49,6 +51,7 @@ func (config *IntensificationsConfigurator) CreateIntensificationHandler(w http.
 // @Produce json
 // @Param Category body model.IntensificationRequest true "Intensification object that needs to be created"
 // @Success 200 {object} model.IntensificationResponse
+// @Failure 500 {string} string "Failed to retrieves all intensifications"
 // @Router /intensifications [get]
 func (config *IntensificationsConfigurator) GetAllIntensificationsHandler(w http.ResponseWriter, r *http.Request) {
 	entries, err := config.IntensificationEntryRepository.FindAll()
@@ -73,6 +76,8 @@ func (config *IntensificationsConfigurator) GetAllIntensificationsHandler(w http
 // @Produce json
 // @Param id path int true "Intensification ID"
 // @Success 200 {object} model.IntensificationResponse
+// @Failure 400 {string} string "Invalid id parameter"
+// @Failure 500 {string} string "Failed to retrieves intensification"
 // @Router /intensifications/{id} [get]
 func (config *IntensificationsConfigurator) GetIntensificationHandler(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")
@@ -98,6 +103,8 @@ func (config *IntensificationsConfigurator) GetIntensificationHandler(w http.Res
 // @Param id path int true "Intensification ID"
 // @Param intensification body model.IntensificationRequest true "Intensification object that needs to be updated"
 // @Success 200 {object} model.IntensificationResponse
+// @Failure 400 {string} string "Invalid id parameter"
+// @Failure 500 {string} string "Failed to update intensification"
 // @Router /intensifications/{id} [put]
 func (config *IntensificationsConfigurator) UpdateIntensificationHandler(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")
@@ -139,6 +146,9 @@ func (config *IntensificationsConfigurator) UpdateIntensificationHandler(w http.
 // @Produce json
 // @Param id path int true "Intensification ID"
 // @Success 200 {object} string
+// @Failure 400 {string} string "Invalid id parameter"
+// @Failure 500 {string} string "Failed to delete intensification on this id"
+// @Failure 404 {string} string "Intensification does not exist"
 // @Router /intensifications/{id} [delete]
 func (config *IntensificationsConfigurator) DeleteIntensificationHandler(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")

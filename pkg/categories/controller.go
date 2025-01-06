@@ -28,6 +28,7 @@ func New(configuration *config.Config) *CategoriesConfigurator {
 // @Produce json
 // @Param Category body model.CategoryRequest true "Category object that needs to be created"
 // @Success 200 {object} model.CategoryResponse
+// @Failure 400 {string} string "Invalid request payload"
 // @Router /categories [post]
 func (config *CategoriesConfigurator) CreateCategoryHandler(w http.ResponseWriter, r *http.Request) {
 	req := &model.CategoryRequest{}
@@ -48,6 +49,7 @@ func (config *CategoriesConfigurator) CreateCategoryHandler(w http.ResponseWrite
 // @Accept json
 // @Produce json
 // @Success 200 {object} []model.CategoryResponse
+// @Failure 500 {string} string "Failed to retrieves all categories"
 // @Router /categories [get]
 func (config *CategoriesConfigurator) GetAllCategoriesHandler(w http.ResponseWriter, r *http.Request) {
 	entries, err := config.CategoryEntryRepository.FindAll()
@@ -71,6 +73,8 @@ func (config *CategoriesConfigurator) GetAllCategoriesHandler(w http.ResponseWri
 // @Accept json
 // @Produce json
 // @Success 200 {object} model.CategoryResponse
+// @Failure 400 {string} string "Invalid id parameter"
+// @Failure 500 {string} string "Failed to retrieve category on this id"
 // @Router /categories/{id} [get]
 func (config *CategoriesConfigurator) GetCategoryHandler(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")
@@ -94,6 +98,8 @@ func (config *CategoriesConfigurator) GetCategoryHandler(w http.ResponseWriter, 
 // @Accept json
 // @Produce json
 // @Success 200 {object} model.CategoryResponse
+// @Failure 400 {string} string "Invalid id parameter"
+// @Failure 500 {string} string "Failed to update category on this id"
 // @Router /categories/{id} [put]
 func (config *CategoriesConfigurator) UpdateCategoryHandler(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")
@@ -134,6 +140,8 @@ func (config *CategoriesConfigurator) UpdateCategoryHandler(w http.ResponseWrite
 // @Accept json
 // @Produce json
 // @Success 200 {object} string
+// @Failure 400 {string} string "Invalid id parameter"
+// @Failure 500 {string} string "Failed to delete category on this id"
 // @Router /categories/{id} [delete]
 func (config *CategoriesConfigurator) DeleteCategoryHandler(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")

@@ -28,6 +28,8 @@ func New(config *config.Config) *exerciseConfig {
 // @Produce json
 // @Param exercise body model.ExerciseRequest true "Exercise object that needs to be created"
 // @Success 200 {object} model.ExerciseResponse
+// @Failure 400 {string} string "Invalid request payload"
+// @Failure 500 {string} string "Failed to create exercise"
 // @Router /exercise [post]
 func (config *exerciseConfig) Create(w http.ResponseWriter, r *http.Request) {
 	req := &model.ExerciseRequest{}
@@ -63,6 +65,8 @@ func (config *exerciseConfig) GetAll(w http.ResponseWriter, r *http.Request) {
 // @Produce json
 // @Param id path int true "Exercise ID"
 // @Success 200 {object} []model.ExerciseResponse
+// @Failure 500 {string} string "Failed to retrieves all exercises"
+// @Failure 400 {string} string "Invalid id parameter"
 // @Router /exercise [get]
 func (config *exerciseConfig) Get(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")
@@ -87,6 +91,8 @@ func (config *exerciseConfig) Get(w http.ResponseWriter, r *http.Request) {
 // @Param id path int true "Exercise ID"
 // @Param exercise body model.ExerciseRequest true "Exercise object that needs to be updated"
 // @Success 200 {object} model.ExerciseResponse
+// @Failure 400 {string} string "Invalid request payload"
+// @Failure 500 {string} string "Failed to update exercise"
 // @Router /exercise/{id} [put]
 func (config *exerciseConfig) Update(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")
@@ -128,6 +134,8 @@ func (config *exerciseConfig) Update(w http.ResponseWriter, r *http.Request) {
 // @Produce json
 // @Param id path int true "Exercise ID"
 // @Success 200 {object} string
+// @Failure 400 {string} string "Invalid or Missing id parameter"
+// @Failure 500 {string} string "Failed to delete exercise on this id"
 // @Router /exercise/{id} [delete]
 func (config *exerciseConfig) Delete(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")

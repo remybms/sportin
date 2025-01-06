@@ -28,6 +28,7 @@ func New(configuration *config.Config) *ProgramConfig {
 // @Produce json
 // @Param program body model.ProgramRequest true "Program object that needs to be created"
 // @Success 200 {object} model.ProgramResponse
+// @Failure 400 {string} string "Invalid request payload"
 // @Router /programs [post]
 func (config *ProgramConfig) CreateProgramHandler(w http.ResponseWriter, r *http.Request) {
 	req := &model.ProgramRequest{}
@@ -48,6 +49,7 @@ func (config *ProgramConfig) CreateProgramHandler(w http.ResponseWriter, r *http
 // @Accept json
 // @Produce json
 // @Success 200 {object} []model.ProgramResponse
+// @Failure 500 {string} string "Failed to retrieves all programs"
 // @Router /programs [get]
 func (config *ProgramConfig) GetAllProgramsHandler(w http.ResponseWriter, r *http.Request) {
 	entries, err := config.ProgramEntryRepository.FindAll()
@@ -72,6 +74,8 @@ func (config *ProgramConfig) GetAllProgramsHandler(w http.ResponseWriter, r *htt
 // @Produce json
 // @Param id path int true "Program ID"
 // @Success 200 {object} model.ProgramResponse
+// @Failure 400 {string} string "Invalid id parameter"
+// @Failure 500 {string} string "Failed to retrieve program on this id"
 // @Router /programs/{id} [get]
 func (config *ProgramConfig) GetProgramHandler(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")
@@ -97,6 +101,9 @@ func (config *ProgramConfig) GetProgramHandler(w http.ResponseWriter, r *http.Re
 // @Param id path int true "Program ID"
 // @Param program body model.ProgramRequest true "Program object that needs to be updated"
 // @Success 200 {object} model.ProgramResponse
+// @Failure 400 {string} string "Invalid request payload"
+// @Failure 500 {string} string "Failed to update program on this id"
+// @Failure 404 {string} string "Program does not exist"
 // @Router /programs/{id} [put]
 func (config *ProgramConfig) UpdateProgramHandler(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")
@@ -138,6 +145,8 @@ func (config *ProgramConfig) UpdateProgramHandler(w http.ResponseWriter, r *http
 // @Produce json
 // @Param id path int true "Program ID"
 // @Success 200 {object} string
+// @Failure 500 {string} string "Failed to delete program on this id"
+// @Failure 404 {string} string "Program does not exist"
 // @Router /programs/{id} [delete]
 func (config *ProgramConfig) DeleteProgramHandler(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")
@@ -160,6 +169,16 @@ func (config *ProgramConfig) DeleteProgramHandler(w http.ResponseWriter, r *http
 	render.JSON(w, r, map[string]string{"message": "Program deleted"})
 }
 
+// @Summary Get all exercices by program
+// @Description Get all exercices by program
+// @Tags Program
+// @Accept json
+// @Produce json
+// @Param id path int true "Program ID"
+// @Success 200 {object} model.ProgramExercise
+// @Failure 400 {string} string "Invalid id parameter"
+// @Failure 500 {string} string "Failed to retrieve program on this id"
+// @Router /programs/{id}/exercices [get]
 func (config *ProgramConfig) GetAllExercicesByProgram(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")
 	id, err := strconv.Atoi(idStr)
