@@ -18,6 +18,7 @@ func Migrate(db *gorm.DB) {
 		&dbmodel.ExerciseEntry{},
 		&dbmodel.IntensificationEntry{},
 		&dbmodel.SetsEntry{},
+		&dbmodel.ProgramExerciseEntry{},
 	)
 	if err != nil {
 		log.Panicln("Database migration failed:", err)
