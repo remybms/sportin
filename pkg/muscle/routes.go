@@ -2,6 +2,7 @@ package muscle
 
 import (
 	"sportin/config"
+	"sportin/pkg/authentification"
 
 	"github.com/go-chi/chi/v5"
 )
@@ -9,12 +10,14 @@ import (
 func Routes(configuration *config.Config) chi.Router {
 	muscle := New(configuration)
 	router := chi.NewRouter()
-
-	router.Post("/", muscle.Create)
-	router.Get("/", muscle.GetAll)
-	router.Get("/{id}", muscle.Get)
-	router.Put("/{id}", muscle.Update)
-	router.Delete("/{id}", muscle.Delete)
+	router.Group(func(r chi.Router) {
+		r.Use(authentification.AuthMiddleware("your_secret_key"))
+		r.Post("/", muscle.Create)
+		r.Get("/", muscle.GetAll)
+		r.Get("/{id}", muscle.Get)
+		r.Put("/{id}", muscle.Update)
+		r.Delete("/{id}", muscle.Delete)
+	})
 
 	return router
 }
