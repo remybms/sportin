@@ -28,11 +28,12 @@ func New(config *config.Config) *MuscleGroup {
 // @Produce json
 // @Param muscleGroup body model.MuscleGroupRequest true "Muscle Group object that needs to be created"
 // @Success 200 {object} model.MuscleGroupResponse
+// @Failure 400 {string} string err.Error()
 // @Router /muscleGroup [post]
 func (config *MuscleGroup) Create(w http.ResponseWriter, r *http.Request) {
 	request := &model.MuscleGroupRequest{}
 	if err := render.Bind(r, request); err != nil {
-		http.Error(w, "Invalid request payload", http.StatusBadRequest)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 	muscleGroup := &dbmodel.MuscleGroupEntry{Name: request.Name, BodyPart: request.BodyPart, Description: request.Description, Level: request.Level}
@@ -47,6 +48,8 @@ func (config *MuscleGroup) Create(w http.ResponseWriter, r *http.Request) {
 // @Produce json
 // @Param id path int true "Muscle Group ID"
 // @Success 200 {object} model.MuscleGroupResponse
+// @Failure 400 {string} string "Missing or invalid id parameter"
+// @Failure 404 {string} string "Muscle group not found"
 // @Router /muscleGroup/{id} [get]
 func (config *MuscleGroup) Get(w http.ResponseWriter, r *http.Request) {
 	strId := chi.URLParam(r, "id")
@@ -72,6 +75,7 @@ func (config *MuscleGroup) Get(w http.ResponseWriter, r *http.Request) {
 // @Accept json
 // @Produce json
 // @Success 200 {object} []model.MuscleGroupResponse
+// @Failure 500 {string} string "Error fetching muscle groups"
 // @Router /muscleGroup [get]
 func (config *MuscleGroup) GetAll(w http.ResponseWriter, r *http.Request) {
 	muscleGroups, err := config.MuscleGroupEntryRepository.FindAll()
@@ -89,6 +93,8 @@ func (config *MuscleGroup) GetAll(w http.ResponseWriter, r *http.Request) {
 // @Produce json
 // @Param id path int true "Muscle Group ID"
 // @Success 200 {object} model.MuscleGroupResponse
+// @Failure 400 {string} string "Missing or invalid id parameter"
+// @Failure 404 {string} string "Muscle group not found"
 // @Router /muscleGroup/{id} [put]
 func (config *MuscleGroup) Update(w http.ResponseWriter, r *http.Request) {
 	strId := chi.URLParam(r, "id")
@@ -132,6 +138,8 @@ func (config *MuscleGroup) Update(w http.ResponseWriter, r *http.Request) {
 // @Produce json
 // @Param id path int true "Muscle Group ID"
 // @Success 200 {object} string
+// @Failure 400 {string} string "Invalid or Missing id parameter"
+// @Failure 404 {string} string "Muscle group not found"
 // @Router /muscleGroup/{id} [delete]
 func (config *MuscleGroup) Delete(w http.ResponseWriter, r *http.Request) {
 	strId := chi.URLParam(r, "id")

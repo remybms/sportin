@@ -465,6 +465,18 @@ const docTemplate = `{
                                 "$ref": "#/definitions/model.MuscleResponse"
                             }
                         }
+                    },
+                    "404": {
+                        "description": "No muscles",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Error fetching muscles",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 }
             },
@@ -497,6 +509,18 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/model.MuscleResponse"
                         }
+                    },
+                    "400": {
+                        "description": "Invalid request payload",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Muscle Group not found",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 }
             }
@@ -528,6 +552,18 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/model.MuscleResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid or Missing id parameter",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Muscle not found",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }
@@ -568,6 +604,18 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/model.MuscleResponse"
                         }
+                    },
+                    "400": {
+                        "description": "Invalid request payload",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Muscle not found",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 }
             },
@@ -598,6 +646,18 @@ const docTemplate = `{
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    "400": {
+                        "description": "Invalid or Missing id parameter",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Muscle not found",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 }
             }
@@ -623,6 +683,12 @@ const docTemplate = `{
                             "items": {
                                 "$ref": "#/definitions/model.MuscleGroupResponse"
                             }
+                        }
+                    },
+                    "500": {
+                        "description": "Error fetching muscle groups",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }
@@ -656,6 +722,12 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/model.MuscleGroupResponse"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 }
             }
@@ -688,6 +760,18 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/model.MuscleGroupResponse"
                         }
+                    },
+                    "400": {
+                        "description": "Missing or invalid id parameter",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Muscle group not found",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 }
             },
@@ -718,6 +802,18 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/model.MuscleGroupResponse"
                         }
+                    },
+                    "400": {
+                        "description": "Missing or invalid id parameter",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Muscle group not found",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 }
             },
@@ -745,6 +841,18 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid or Missing id parameter",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Muscle group not found",
                         "schema": {
                             "type": "string"
                         }

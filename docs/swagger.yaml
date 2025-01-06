@@ -479,6 +479,14 @@ paths:
             items:
               $ref: '#/definitions/model.MuscleResponse'
             type: array
+        "404":
+          description: No muscles
+          schema:
+            type: string
+        "500":
+          description: Error fetching muscles
+          schema:
+            type: string
       summary: Get all muscles
       tags:
       - Muscle
@@ -500,6 +508,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/model.MuscleResponse'
+        "400":
+          description: Invalid request payload
+          schema:
+            type: string
+        "404":
+          description: Muscle Group not found
+          schema:
+            type: string
       summary: Create a new muscle
       tags:
       - Muscle
@@ -519,6 +535,14 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            type: string
+        "400":
+          description: Invalid or Missing id parameter
+          schema:
+            type: string
+        "404":
+          description: Muscle not found
           schema:
             type: string
       summary: Delete muscle
@@ -541,6 +565,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/model.MuscleResponse'
+        "400":
+          description: Invalid or Missing id parameter
+          schema:
+            type: string
+        "404":
+          description: Muscle not found
+          schema:
+            type: string
       summary: Get muscle
       tags:
       - Muscle
@@ -567,6 +599,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/model.MuscleResponse'
+        "400":
+          description: Invalid request payload
+          schema:
+            type: string
+        "404":
+          description: Muscle not found
+          schema:
+            type: string
       summary: Update muscle
       tags:
       - Muscle
@@ -584,6 +624,10 @@ paths:
             items:
               $ref: '#/definitions/model.MuscleGroupResponse'
             type: array
+        "500":
+          description: Error fetching muscle groups
+          schema:
+            type: string
       summary: Get all muscle groups
       tags:
       - MuscleGroup
@@ -605,6 +649,10 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/model.MuscleGroupResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
       summary: Create a new muscle group
       tags:
       - MuscleGroup
@@ -624,6 +672,14 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            type: string
+        "400":
+          description: Invalid or Missing id parameter
+          schema:
+            type: string
+        "404":
+          description: Muscle group not found
           schema:
             type: string
       summary: Delete muscle group
@@ -646,6 +702,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/model.MuscleGroupResponse'
+        "400":
+          description: Missing or invalid id parameter
+          schema:
+            type: string
+        "404":
+          description: Muscle group not found
+          schema:
+            type: string
       summary: Get muscle group
       tags:
       - MuscleGroup
@@ -666,6 +730,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/model.MuscleGroupResponse'
+        "400":
+          description: Missing or invalid id parameter
+          schema:
+            type: string
+        "404":
+          description: Muscle group not found
+          schema:
+            type: string
       summary: Update muscle group
       tags:
       - MuscleGroup
