@@ -29,11 +29,13 @@ func New(config *config.Config) *Muscle {
 // @Produce json
 // @Param muscle body model.MuscleRequest true "Muscle object that needs to be created"
 // @Success 200 {object} model.MuscleResponse
+// @Failure 400 {string} string "Invalid request payload"
+// @Failure 404 {string} string "Muscle Group not found"
 // @Router /muscle [post]
 func (config *Muscle) Create(w http.ResponseWriter, r *http.Request) {
 	request := &model.MuscleRequest{}
 	if err := render.Bind(r, request); err != nil {
-		http.Error(w, "Invalid request payload", http.StatusBadRequest)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 	if request.MuscleGroupID < 1 {
@@ -56,6 +58,8 @@ func (config *Muscle) Create(w http.ResponseWriter, r *http.Request) {
 // @Produce json
 // @Param id path int true "Muscle ID"
 // @Success 200 {object} model.MuscleResponse
+// @Failure 400 {string} string "Invalid or Missing id parameter"
+// @Failure 404 {string} string "Muscle not found"
 // @Router /muscle/{id} [get]
 func (config *Muscle) Get(w http.ResponseWriter, r *http.Request) {
 	strId := chi.URLParam(r, "id")
@@ -81,11 +85,17 @@ func (config *Muscle) Get(w http.ResponseWriter, r *http.Request) {
 // @Accept json
 // @Produce json
 // @Success 200 {object} []model.MuscleResponse
+// @Failure 500 {string} string "Error fetching muscles"
+// @Failure 404 {string} string "No muscles"
 // @Router /muscle [get]
 func (config *Muscle) GetAll(w http.ResponseWriter, r *http.Request) {
 	muscles, err := config.MuscleEntryRepository.FindAll()
 	if err != nil {
-		http.Error(w, "Error fetching muscle s", http.StatusInternalServerError)
+		http.Error(w, "Error fetching muscles", http.StatusInternalServerError)
+		return
+	}
+	if len(muscles) == 0 {
+		http.Error(w, "No muscles", http.StatusNotFound)
 		return
 	}
 	render.JSON(w, r, config.MuscleEntryRepository.ToModelList(muscles))
@@ -99,6 +109,8 @@ func (config *Muscle) GetAll(w http.ResponseWriter, r *http.Request) {
 // @Param id path int true "Muscle ID"
 // @Param muscle body model.MuscleRequest true "Muscle object that needs to be updated"
 // @Success 200 {object} model.MuscleResponse
+// @Failure 400 {string} string "Invalid request payload"
+// @Failure 404 {string} string "Muscle not found"
 // @Router /muscle/{id} [put]
 func (config *Muscle) Update(w http.ResponseWriter, r *http.Request) {
 	strId := chi.URLParam(r, "id")
@@ -109,6 +121,7 @@ func (config *Muscle) Update(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(strId)
 	if err != nil || id < 1 {
 		http.Error(w, "Invalid id parameter", http.StatusBadRequest)
+		return
 	}
 	muscle, err := config.MuscleEntryRepository.FindById(id)
 	if err != nil {
@@ -139,6 +152,8 @@ func (config *Muscle) Update(w http.ResponseWriter, r *http.Request) {
 // @Produce json
 // @Param id path int true "Muscle ID"
 // @Success 200 {object} string
+// @Failure 400 {string} string "Invalid or Missing id parameter"
+// @Failure 404 {string} string "Muscle not found"
 // @Router /muscle/{id} [delete]
 func (config *Muscle) Delete(w http.ResponseWriter, r *http.Request) {
 	strId := chi.URLParam(r, "id")

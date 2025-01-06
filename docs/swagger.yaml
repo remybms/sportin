@@ -104,6 +104,31 @@ definitions:
       name:
         type: string
     type: object
+  model.ProgramExercise:
+    properties:
+      exercice:
+        items:
+          $ref: '#/definitions/model.ExerciseResponse'
+        type: array
+      program:
+        $ref: '#/definitions/model.ProgramResponse'
+    type: object
+  model.ProgramExerciseRequest:
+    properties:
+      exercise_id:
+        type: integer
+      program_id:
+        type: integer
+    type: object
+  model.ProgramExerciseResponse:
+    properties:
+      exercise_id:
+        type: integer
+      id:
+        type: integer
+      program_id:
+        type: integer
+    type: object
   model.ProgramRequest:
     properties:
       category_id:
@@ -122,6 +147,50 @@ definitions:
       id:
         type: integer
       name:
+        type: string
+    type: object
+  model.SetsReponse:
+    properties:
+      id:
+        type: integer
+      intensification_id:
+        type: integer
+      program_exercise_id:
+        type: integer
+      resistance_band:
+        type: string
+      rest_time:
+        type: integer
+      rir:
+        type: integer
+      rpe:
+        type: integer
+      weight:
+        type: integer
+      work:
+        type: string
+      workType:
+        type: string
+    type: object
+  model.SetsRequest:
+    properties:
+      intensification_id:
+        type: integer
+      program_exercise_id:
+        type: integer
+      resistance_band:
+        type: string
+      rest_time:
+        type: integer
+      rir:
+        type: integer
+      rpe:
+        type: integer
+      weight:
+        type: integer
+      work:
+        type: string
+      workType:
         type: string
     type: object
   model.UserRequest:
@@ -197,6 +266,10 @@ paths:
             items:
               $ref: '#/definitions/model.CategoryResponse'
             type: array
+        "500":
+          description: Failed to retrieves all categories
+          schema:
+            type: string
       summary: Get all categries
       tags:
       - Category
@@ -218,6 +291,10 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/model.CategoryResponse'
+        "400":
+          description: Invalid request payload
+          schema:
+            type: string
       summary: Create a new category
       tags:
       - Category
@@ -231,6 +308,14 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            type: string
+        "400":
+          description: Invalid id parameter
+          schema:
+            type: string
+        "500":
+          description: Failed to delete category on this id
           schema:
             type: string
       summary: Delete category
@@ -247,6 +332,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/model.CategoryResponse'
+        "400":
+          description: Invalid id parameter
+          schema:
+            type: string
+        "500":
+          description: Failed to retrieve category on this id
+          schema:
+            type: string
       summary: Get a categry
       tags:
       - Category
@@ -261,6 +354,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/model.CategoryResponse'
+        "400":
+          description: Invalid id parameter
+          schema:
+            type: string
+        "500":
+          description: Failed to update category on this id
+          schema:
+            type: string
       summary: Update a categry
       tags:
       - Category
@@ -284,6 +385,14 @@ paths:
             items:
               $ref: '#/definitions/model.ExerciseResponse'
             type: array
+        "400":
+          description: Invalid id parameter
+          schema:
+            type: string
+        "500":
+          description: Failed to retrieves all exercises
+          schema:
+            type: string
       summary: Get exercise
       tags:
       - Exercise
@@ -305,6 +414,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/model.ExerciseResponse'
+        "400":
+          description: Invalid request payload
+          schema:
+            type: string
+        "500":
+          description: Failed to create exercise
+          schema:
+            type: string
       summary: Create a new exercise
       tags:
       - Exercise
@@ -324,6 +441,14 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            type: string
+        "400":
+          description: Invalid or Missing id parameter
+          schema:
+            type: string
+        "500":
+          description: Failed to delete exercise on this id
           schema:
             type: string
       summary: Delete a new exercise
@@ -352,6 +477,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/model.ExerciseResponse'
+        "400":
+          description: Invalid request payload
+          schema:
+            type: string
+        "500":
+          description: Failed to update exercise
+          schema:
+            type: string
       summary: Update a new exercise
       tags:
       - Exercise
@@ -374,6 +507,10 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/model.IntensificationResponse'
+        "500":
+          description: Failed to retrieves all intensifications
+          schema:
+            type: string
       summary: Get all Intensification
       tags:
       - Intensification
@@ -395,6 +532,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/model.IntensificationResponse'
+        "400":
+          description: Invalid request payload
+          schema:
+            type: string
+        "500":
+          description: Failed to create intensification
+          schema:
+            type: string
       summary: Create a new Intensification
       tags:
       - Intensification
@@ -414,6 +559,18 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            type: string
+        "400":
+          description: Invalid id parameter
+          schema:
+            type: string
+        "404":
+          description: Intensification does not exist
+          schema:
+            type: string
+        "500":
+          description: Failed to delete intensification on this id
           schema:
             type: string
       summary: Delete Intensification
@@ -436,6 +593,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/model.IntensificationResponse'
+        "400":
+          description: Invalid id parameter
+          schema:
+            type: string
+        "500":
+          description: Failed to retrieves intensification
+          schema:
+            type: string
       summary: Get Intensification
       tags:
       - Intensification
@@ -462,6 +627,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/model.IntensificationResponse'
+        "400":
+          description: Invalid id parameter
+          schema:
+            type: string
+        "500":
+          description: Failed to update intensification
+          schema:
+            type: string
       summary: Update Intensification
       tags:
       - Intensification
@@ -523,6 +696,14 @@ paths:
             items:
               $ref: '#/definitions/model.MuscleResponse'
             type: array
+        "404":
+          description: No muscles
+          schema:
+            type: string
+        "500":
+          description: Error fetching muscles
+          schema:
+            type: string
       summary: Get all muscles
       tags:
       - Muscle
@@ -544,6 +725,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/model.MuscleResponse'
+        "400":
+          description: Invalid request payload
+          schema:
+            type: string
+        "404":
+          description: Muscle Group not found
+          schema:
+            type: string
       summary: Create a new muscle
       tags:
       - Muscle
@@ -563,6 +752,14 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            type: string
+        "400":
+          description: Invalid or Missing id parameter
+          schema:
+            type: string
+        "404":
+          description: Muscle not found
           schema:
             type: string
       summary: Delete muscle
@@ -585,6 +782,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/model.MuscleResponse'
+        "400":
+          description: Invalid or Missing id parameter
+          schema:
+            type: string
+        "404":
+          description: Muscle not found
+          schema:
+            type: string
       summary: Get muscle
       tags:
       - Muscle
@@ -611,6 +816,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/model.MuscleResponse'
+        "400":
+          description: Invalid request payload
+          schema:
+            type: string
+        "404":
+          description: Muscle not found
+          schema:
+            type: string
       summary: Update muscle
       tags:
       - Muscle
@@ -628,6 +841,10 @@ paths:
             items:
               $ref: '#/definitions/model.MuscleGroupResponse'
             type: array
+        "500":
+          description: Error fetching muscle groups
+          schema:
+            type: string
       summary: Get all muscle groups
       tags:
       - MuscleGroup
@@ -649,6 +866,10 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/model.MuscleGroupResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
       summary: Create a new muscle group
       tags:
       - MuscleGroup
@@ -668,6 +889,14 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            type: string
+        "400":
+          description: Invalid or Missing id parameter
+          schema:
+            type: string
+        "404":
+          description: Muscle group not found
           schema:
             type: string
       summary: Delete muscle group
@@ -690,6 +919,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/model.MuscleGroupResponse'
+        "400":
+          description: Missing or invalid id parameter
+          schema:
+            type: string
+        "404":
+          description: Muscle group not found
+          schema:
+            type: string
       summary: Get muscle group
       tags:
       - MuscleGroup
@@ -710,9 +947,158 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/model.MuscleGroupResponse'
+        "400":
+          description: Missing or invalid id parameter
+          schema:
+            type: string
+        "404":
+          description: Muscle group not found
+          schema:
+            type: string
       summary: Update muscle group
       tags:
       - MuscleGroup
+  /programExercise:
+    get:
+      consumes:
+      - application/json
+      description: Get all program exercises
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.ProgramExerciseResponse'
+            type: array
+        "500":
+          description: Error fetching program exercises
+          schema:
+            type: string
+      summary: Get all program exercises
+      tags:
+      - ProgramExercise
+    post:
+      consumes:
+      - application/json
+      description: Create a new program exercise
+      parameters:
+      - description: Program Exercise object that needs to be created
+        in: body
+        name: programExercise
+        required: true
+        schema:
+          $ref: '#/definitions/model.ProgramExerciseRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ProgramExerciseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Failed to create program exercise
+          schema:
+            type: string
+      summary: Create a new program exercise
+      tags:
+      - ProgramExercise
+  /programExercise/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete program exercise
+      parameters:
+      - description: Program Exercise ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Program exercise deleted
+          schema:
+            type: string
+        "400":
+          description: Missing id parameter
+          schema:
+            type: string
+        "500":
+          description: Failed to delete program exercise
+          schema:
+            type: string
+      summary: Delete program exercise
+      tags:
+      - ProgramExercise
+    get:
+      consumes:
+      - application/json
+      description: Get program exercise
+      parameters:
+      - description: Program Exercise ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ProgramExerciseResponse'
+        "400":
+          description: Missing or invalid id parameter
+          schema:
+            type: string
+        "404":
+          description: Program exercise not found
+          schema:
+            type: string
+      summary: Get program exercise
+      tags:
+      - ProgramExercise
+    put:
+      consumes:
+      - application/json
+      description: Update program exercise
+      parameters:
+      - description: Program Exercise ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Program Exercise object that needs to be updated
+        in: body
+        name: programExercise
+        required: true
+        schema:
+          $ref: '#/definitions/model.ProgramExerciseRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ProgramExerciseResponse'
+        "400":
+          description: Missing or invalid id parameter
+          schema:
+            type: string
+        "404":
+          description: Program exercise not found
+          schema:
+            type: string
+      summary: Update program exercise
+      tags:
+      - ProgramExercise
   /programs:
     get:
       consumes:
@@ -727,6 +1113,10 @@ paths:
             items:
               $ref: '#/definitions/model.ProgramResponse'
             type: array
+        "500":
+          description: Failed to retrieves all programs
+          schema:
+            type: string
       summary: Get all programs
       tags:
       - Program
@@ -748,6 +1138,10 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/model.ProgramResponse'
+        "400":
+          description: Invalid request payload
+          schema:
+            type: string
       summary: Create a new program
       tags:
       - Program
@@ -767,6 +1161,14 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            type: string
+        "404":
+          description: Program does not exist
+          schema:
+            type: string
+        "500":
+          description: Failed to delete program on this id
           schema:
             type: string
       summary: Delete a program
@@ -789,6 +1191,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/model.ProgramResponse'
+        "400":
+          description: Invalid id parameter
+          schema:
+            type: string
+        "500":
+          description: Failed to retrieve program on this id
+          schema:
+            type: string
       summary: Get program
       tags:
       - Program
@@ -815,9 +1225,187 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/model.ProgramResponse'
+        "400":
+          description: Invalid request payload
+          schema:
+            type: string
+        "404":
+          description: Program does not exist
+          schema:
+            type: string
+        "500":
+          description: Failed to update program on this id
+          schema:
+            type: string
       summary: Update a program
       tags:
       - Program
+  /programs/{id}/exercices:
+    get:
+      consumes:
+      - application/json
+      description: Get all exercices by program
+      parameters:
+      - description: Program ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.ProgramExercise'
+        "400":
+          description: Invalid id parameter
+          schema:
+            type: string
+        "500":
+          description: Failed to retrieve program on this id
+          schema:
+            type: string
+      summary: Get all exercices by program
+      tags:
+      - Program
+  /sets:
+    get:
+      consumes:
+      - application/json
+      description: Get all sets
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.SetsReponse'
+            type: array
+        "500":
+          description: Failed to retrieves all sets
+          schema:
+            type: string
+      summary: Get all sets
+      tags:
+      - Sets
+    post:
+      consumes:
+      - application/json
+      description: Create a new sets
+      parameters:
+      - description: Sets object that needs to be created
+        in: body
+        name: sets
+        required: true
+        schema:
+          $ref: '#/definitions/model.SetsRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.SetsReponse'
+        "400":
+          description: Invalid request payload
+          schema:
+            type: string
+      summary: Create a new sets
+      tags:
+      - Sets
+  /sets/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete sets
+      parameters:
+      - description: Sets ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: Invalid id parameter
+          schema:
+            type: string
+        "404":
+          description: Sets does not exist
+          schema:
+            type: string
+      summary: Delete sets
+      tags:
+      - Sets
+    get:
+      consumes:
+      - application/json
+      description: Get sets
+      parameters:
+      - description: Sets ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.SetsReponse'
+        "400":
+          description: Invalid id parameter
+          schema:
+            type: string
+        "404":
+          description: Sets not found
+          schema:
+            type: string
+      summary: Get sets
+      tags:
+      - Sets
+    put:
+      consumes:
+      - application/json
+      description: Update sets
+      parameters:
+      - description: Sets ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Sets object that needs to be updated
+        in: body
+        name: sets
+        required: true
+        schema:
+          $ref: '#/definitions/model.SetsRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.SetsReponse'
+        "400":
+          description: Invalid id parameter
+          schema:
+            type: string
+        "500":
+          description: Failed to update sets on this id
+          schema:
+            type: string
+      summary: Update sets
+      tags:
+      - Sets
   /userStats:
     get:
       consumes:
