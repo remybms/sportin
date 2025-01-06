@@ -11,6 +11,8 @@ import (
 	"sportin/pkg/muscle"
 	musclegroup "sportin/pkg/muscleGroup"
 	"sportin/pkg/program"
+	programexercise "sportin/pkg/programExercise"
+	"sportin/pkg/sets"
 	userstats "sportin/pkg/userStats"
 	"sportin/pkg/users"
 
@@ -31,6 +33,8 @@ func Routes(configuration *config.Config, userRepository dbmodel.UserRepository)
 	router.Mount("/api/v1/programs", program.Routes(configuration))
 	router.Mount("/api/v1/exercises", exercise.Routes(configuration))
 	router.Mount("/api/v1/intensifications", intensifications.Routes(configuration))
+	router.Mount("/api/v1/program_exercises", programexercise.Routes(configuration))
+	router.Mount("/api/v1/sets", sets.Routes(configuration))
 	return router
 }
 

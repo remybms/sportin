@@ -8,12 +8,13 @@ import (
 
 type ProgramEntry struct {
 	gorm.Model
-	Name        string        `gorm:"column:name"`
-	Description string        `gorm:"column:description"`
-	UserID      int           `gorm:"column:user_id"`
-	User        UserEntry     `gorm:"foreignKey:UserID"`
-	CategoryID  int           `gorm:"column:category_id"`
-	Category    CategoryEntry `gorm:"foreignKey:CategoryID"`
+	Name            string                  `gorm:"column:name"`
+	Description     string                  `gorm:"column:description"`
+	UserID          int                     `gorm:"column:user_id"`
+	User            UserEntry               `gorm:"foreignKey:UserID"`
+	CategoryID      int                     `gorm:"column:category_id"`
+	Category        CategoryEntry           `gorm:"foreignKey:CategoryID"`
+	ProgramExercise []*ProgramExerciseEntry `gorm:"foreignKey:ProgramID"`
 }
 
 type ProgramEntryRepository interface {
