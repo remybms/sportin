@@ -24,7 +24,7 @@ git clone https://github.com/your-username/strengthapi.git
 cd strengthapi
 ```
 
-2. Make sure your credentials are set up in config/config.go (username and password)
+2. Copy/paste env.example rename .env and set your env variables.
 
 3. install depedencies
 
