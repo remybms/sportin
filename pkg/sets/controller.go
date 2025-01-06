@@ -28,7 +28,7 @@ func (config *SetsConfigurator) CreateSetsHandler(w http.ResponseWriter, r *http
 		return
 	}
 
-	setsEntry := &dbmodel.SetsEntry{RPE: req.RPE, RIR: req.RIR, Weight: req.Weight, Work: req.Work, WorkType: req.WorkType, ResistanceBand: req.ResistanceBand, RestTime: req.RestTime}
+	setsEntry := &dbmodel.SetsEntry{IntensificationID: req.IntensificationID, ProgramExerciceID: req.ProgramExerciseID, RPE: req.RPE, RIR: req.RIR, Weight: req.Weight, Work: req.Work, WorkType: req.WorkType, ResistanceBand: req.ResistanceBand, RestTime: req.RestTime}
 	config.SetsEntryRepository.Create(setsEntry)
 
 	render.JSON(w, r, config.SetsEntryRepository.ToModel(setsEntry))

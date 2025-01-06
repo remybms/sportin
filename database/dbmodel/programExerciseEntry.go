@@ -12,6 +12,7 @@ type ProgramExerciseEntry struct {
 	Program    ProgramEntry  `gorm:"foreignKey:ProgramID"`
 	ExerciseID int           `gorm:"column:exercise_id"`
 	Exercise   ExerciseEntry `gorm:"foreignKey:ExerciseID"`
+	Sets       *SetsEntry    `gorm:"foreignKey:ProgramExerciceID"`
 }
 
 type ProgramExerciseEntryRepository interface {

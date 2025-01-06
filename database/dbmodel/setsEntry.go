@@ -17,7 +17,8 @@ type SetsEntry struct {
 	RestTime          int    `gorm:"column:rest_time"`
 	Intensification   IntensificationEntry
 	IntensificationID int `gorm:"column:intensification_id"`
-	// FOREIGN KEY
+	ProgramExercice   ProgramExerciseEntry
+	ProgramExerciceID int `gorm:"column:program_exercice_id"`
 }
 
 type SetsEntryRepository interface {
@@ -76,13 +77,15 @@ func (r *setsEntryRepository) Delete(id int) (bool, error) {
 
 func (r *setsEntryRepository) ToModel(entry *SetsEntry) *model.SetsReponse {
 	return &model.SetsReponse{
-		ID:             int(entry.ID),
-		RPE:            entry.RPE,
-		RIR:            entry.RIR,
-		Weight:         entry.Weight,
-		Work:           entry.Work,
-		WorkType:       entry.WorkType,
-		ResistanceBand: entry.ResistanceBand,
-		RestTime:       entry.RestTime,
+		ID:                int(entry.ID),
+		RPE:               entry.RPE,
+		RIR:               entry.RIR,
+		Weight:            entry.Weight,
+		Work:              entry.Work,
+		WorkType:          entry.WorkType,
+		ResistanceBand:    entry.ResistanceBand,
+		RestTime:          entry.RestTime,
+		IntensificationID: entry.IntensificationID,
+		ProgramExerciseID: entry.ProgramExerciceID,
 	}
 }
