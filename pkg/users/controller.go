@@ -56,7 +56,7 @@ func (config *UserConfig) GetUsersHandler(w http.ResponseWriter, r *http.Request
 	}
 
 	if len(users) == 0 {
-		render.JSON(w, r, map[string]string{"message": "User not found, please create one"})
+		render.JSON(w, r, map[string]string{"message": "User not found"})
 		return
 	}
 
@@ -123,7 +123,7 @@ func (config *UserConfig) DeleteUserHandler(w http.ResponseWriter, r *http.Reque
 
 	_, err = config.UserRepository.FindByID(userID)
 	if err != nil {
-		render.JSON(w, r, map[string]string{"message": "User not found, please create one"})
+		render.JSON(w, r, map[string]string{"message": "User not found"})
 		return
 	}
 
