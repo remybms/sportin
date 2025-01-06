@@ -9,15 +9,15 @@ import (
 )
 
 type Config struct {
-	DB                         *gorm.DB
-	MuscleGroupEntryRepository dbmodel.MuscleGroupEntryRepository
-	UserRepository             dbmodel.UserRepository
-	UserStatsRepository        dbmodel.UserStatsRepository
-	CategoryEntryRepository    dbmodel.CategoryEntryRepository
-	ProgramEntryRepository     dbmodel.ProgramEntryRepository
-	MuscleEntryRepository      dbmodel.MuscleEntryRepository
+	DB                             *gorm.DB
+	MuscleGroupEntryRepository     dbmodel.MuscleGroupEntryRepository
+	UserRepository                 dbmodel.UserRepository
+	UserStatsRepository            dbmodel.UserStatsRepository
+	CategoryEntryRepository        dbmodel.CategoryEntryRepository
+	ProgramEntryRepository         dbmodel.ProgramEntryRepository
+	MuscleEntryRepository          dbmodel.MuscleEntryRepository
+	IntensificationEntryRepository dbmodel.IntensificationEntryRepository
 	ExerciseEntryRepository    dbmodel.ExerciseEntryRepository
-}
 
 func New() (*Config, error) {
 	config := Config{}
@@ -32,8 +32,11 @@ func New() (*Config, error) {
 	config.UserRepository = dbmodel.NewUserRepository(databaseSession)
 	config.UserStatsRepository = dbmodel.NewUserStatsRepository(databaseSession)
 	config.MuscleGroupEntryRepository = dbmodel.NewMuscleGroupEntryRepository(databaseSession)
+	config.MuscleEntryRepository = dbmodel.NewMuscleEntryRepository(databaseSession)
 	config.ProgramEntryRepository = dbmodel.NewProgramEntryRepository(databaseSession)
 	config.MuscleEntryRepository = dbmodel.NewMuscleEntryRepository(databaseSession)
 	config.ExerciseEntryRepository = dbmodel.NewExerciseEntryRepository(databaseSession)
+	config.IntensificationEntryRepository = dbmodel.NewIntensificationEntryRepository(databaseSession)
+
 	return &config, nil
 }
