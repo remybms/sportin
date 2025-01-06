@@ -177,6 +177,19 @@ func (config *UserConfig) DeleteUserHandler(w http.ResponseWriter, r *http.Reque
 	render.JSON(w, r, map[string]string{"message": "User deleted successfully"})
 }
 
+// @Summary Login
+// @Description Login
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param email body string true "Email"
+// @Param password body string true "Password"
+// @Success 200 {object} string
+// @Failure 400 {object} string
+// @Failure 401 {object} string
+// @Failure 404 {object} string
+// @Failure 500 {object} string
+// @Router /login [post]
 func (config *UserConfig) LoginHandler(w http.ResponseWriter, r *http.Request) {
 	var payload struct {
 		Email    string `json:"email"`
